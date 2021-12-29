@@ -16,14 +16,14 @@ def tyre_wear():
         vars_list = f.readlines()
 
     for string in vars_list:
-        wear = 'wear'
+        wear = "wear"
         if wear in string:
             wear_list.append(string)
         else:
             pass
 
     for substring in wear_list:
-        first_double_space = substring.find(' ')
+        first_double_space = substring.find(" ")
         tyre_wear_options.append(substring[0:first_double_space])
 
     for item in tyre_wear_options:
@@ -49,13 +49,14 @@ def tyre_wear():
 
 
 def dictionary(corner, var):
-    if corner == 'LF':
+    if corner == "LF":
         LF.append(var)
-    elif corner == 'LR':
+    elif corner == "LR":
+
         LR.append(var)
-    elif corner == 'RF':
+    elif corner == "RF":
         RF.append(var)
-    elif corner == 'RR':
+    elif corner == "RR":
         RR.append(var)
 
 
@@ -68,9 +69,9 @@ def sub_dict(subset, corner):
 
 
 def driver_inputs():
-    driver_inputs_options = ['Throttle', 'Brake', 'Gear', 'SteeringWheelAngle']
+    driver_inputs_options = ["Throttle", "Brake", "Gear", "SteeringWheelAngle"]
     return driver_inputs_options
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print(tyre_wear())
