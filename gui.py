@@ -4,7 +4,7 @@ import pretty_errors
 import app as tyre_app
 import vars
 
-labels = ['LF', 'LR', 'RF', 'RR']
+LABELS = ['LF', 'LR', 'RF', 'RR']
 
 
 class Options:  # Just to hold variables for GUI
@@ -141,7 +141,7 @@ class Variables:
         else:
             pass
 
-        # call seperate function to update labels with refreshed info
+        # call seperate function to update LABELS with refreshed info
         self.set_labels(time=self.time_now, ir=self.iracing_state)
 
         tyre_app.after(10, self.refresh_vars)
@@ -150,8 +150,8 @@ class Variables:
         mychildren.gutter.time_label.configure(text=time)
         mychildren.gutter.iracing_label.configure(text=ir)
         optiontoshow = mychildren.rightframe.option.get()
-        # for value in self.labels.keys():
-        # self.labels[value].tyre_label.configure(text=self.local_stop_dict[optiontoshow][value])
+        # for value in self.LABELS.keys():
+        # self.LABELS[value].tyre_label.configure(text=self.local_stop_dict[optiontoshow][value])
 
     def treat_wear(self, stop_values):
         pass
@@ -165,7 +165,7 @@ class MYChildren:
         self.mainframe = MainFrame(container=tyre_app)
         self.rightframe = RightFrame(container=tyre_app)
         frames = [TyreFrame(container=self.mainframe, side=options.info_for_creation[i]['side'],
-                            text=options.info_for_creation[i]['text']) for i in labels]
+                            text=options.info_for_creation[i]['text']) for i in LABELS]
         names = ['lf_frame', 'lr_frame', 'rf_frame', 'rr_frame']
 
         self.lf_frame = TyreFrame(container=self.mainframe, side='left', text='LF')
