@@ -42,18 +42,20 @@ class MainFrame(tk.Frame):  # holds all the shit on the left
         super().__init__(container)
         self.configure(bg=options.colours["bg"])
         self.columnconfigure(1, weight=1)
-        self.columnconfigure(2, weight=2)
+        self.columnconfigure(2, weight=1)
         self.rowconfigure(1, weight=1)
-        self.rowconfigure(2, weight=2)
+        self.rowconfigure(2, weight=1)
         self.pack(fill="both", side="left", expand="true")
 
 
 class RightFrame(tk.Frame):  # to hold the drop down
     def __init__(self, container):
         super().__init__(container)
-        self.stop_list = ["Initial"]  # will work out why I put this here
 
-        self.configure(bg=options.colours["bg"])  # this is the frame
+        self.stop_list = ["Initial"]  # will work out why I put this here
+        self.configure(
+            bg=options.colours["bg"], relief="raised", borderwidth=2
+        )  # this is the frame
 
         # option menu options
         self.option = tk.StringVar(value="Initial")
@@ -70,7 +72,7 @@ class RightFrame(tk.Frame):  # to hold the drop down
         self.dropdown.pack(fill="both")
 
         # pack itself
-        self.pack(side="right", fill="both", **options.padding)
+        self.pack(side="right", fill="y", **options.padding)
 
     def refresh(self, stops):
         self.stop_list = stops
@@ -105,25 +107,28 @@ class Gutter(tk.Frame):  # this is the bottom frame to contain time & IR state
 class TyreFrame(tk.Frame):  # Frames for each corner of the car
     def __init__(self, container, text):
         super().__init__(container)
-        self.gridding_info = {
+
+        self.gridding_info = {  # this drives the gridding info
             "LF": {"row": 1, "column": 1},
             "RF": {"row": 1, "column": 2},
             "RR": {"row": 2, "column": 2},
             "LR": {"row": 2, "column": 1},
-        }  # this drives the packing info
+        }
 
         self.areas = ["L", "M", "R"]
-        self.config = [
-            text + "wear" + i for i in self.areas
-        ]  # Constructs the variables to pass to  irsdk,
+        self.config = [text + "wear" + i for i in self.areas]
+        # Constructs the variables to pass to  irsdk,
         # i.e LFwearM
         self.configure(
-            bg=options.colours["fg"], borderwidth=2, relief="raised", **options.padding
+            bg=options.colours["fg"], borderwidth=5, relief="raised", **options.padding
         )
+
         self.tyre_label = tk.Label(self, text=self.config)
-        self.tyre_label.configure(**options.inv_colours, font=50)
+        self.tyre_label.configure(**options.inv_colours, font=50, width=10, height=9)
+
         self.tyre_label.pack()
-        self.grid(**self.gridding_info[text], **options.padding, sticky="ew")
+
+        self.grid(**self.gridding_info[text], **options.padding)
 
 
 class App(tk.Tk):  # root window
@@ -185,8 +190,9 @@ class Variables:
 
         # call seperate function to update LABELS with refreshed info
         self.set_labels()
-
-        tyre_app.after(10, self.local_loop)  # loop it
+        print("frame size: " + str(ch.mf.winfo_width()))
+        print(ch.lf_frame.winfo_width())
+        tyre_app.after(1000, self.local_loop)  # loop it
 
     def set_labels(self):
         ch.gut.time_label.configure(text=self.time_now)
