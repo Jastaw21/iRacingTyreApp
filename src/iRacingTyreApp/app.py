@@ -1,7 +1,7 @@
 import irsdk
 import ir_vars
 
-
+print('jw')
 # main class to be called from UI
 class Driver:
     def __init__(self):
