@@ -1,7 +1,7 @@
 from datetime import datetime
 import irsdk
 import time
-import vars
+from src import ir_vars
 
 
 class State:  # general variables
@@ -21,7 +21,7 @@ class State:  # general variables
                                 
 """  # NRG ASCI LOGO
     tyre_state = {}
-    tyre_variables = vars.tyre_wear()
+    tyre_variables = ir_vars.tyre_wear()
 
 
 class Tyre:  # takes one corner at a time and puts it into a human readable list

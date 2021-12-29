@@ -1,8 +1,7 @@
 import tkinter as tk
 from datetime import datetime
-import pretty_errors
-import app as tyre_app
-import vars
+from src.app import app as tyre_app
+from src.ir_vars import ir_vars
 
 LABELS = ['LF', 'LR', 'RF', 'RR']
 
@@ -13,7 +12,7 @@ class Options:  # Just to hold variables for GUI
     padding = dict(padx=1, pady=1)
     large_padding = dict(padx=5, pady=5)
 
-    tyres = vars.tyre_wear()
+    tyres = ir_vars.tyre_wear()
     info_for_creation = dict(LF={'side': 'left', 'text': 'LF', 'container': 'mainframe'},
                              RF={'side': 'right', 'text': 'RF', 'container': 'mainframe'},
                              LR={'side': 'left', 'text': 'LR', 'container': 'mainframe'},
@@ -118,7 +117,7 @@ class App(tk.Tk):  # root window
 
 class Variables:
     def __init__(self):
-        self.local_stop_dict = None
+        self.local_stop_dict = ir_app.initial_tyres
         self.local_stop_list = None
         self.time_now = datetime.now().strftime('%A %b %y %H:%M:%S')
         self.iracing_state = 'test'
@@ -128,11 +127,14 @@ class Variables:
 
     def refresh_vars(self):
 
+        # call the main_loop of irSDK
+        ir_app.main_loop()
+
         # refresh session info
         self.time_now = datetime.now().strftime('%A %b %y %H:%M:%S')
         self.iracing_state = ir_app.ir_label
         self.current_tyres = ir_app.current_tyres
-        self.local_stop_dict = ir_app.tyre_state()
+
         self.local_stop_list = [stop for stop in self.local_stop_dict.keys()]
 
         # check if there has been another stop, if so, update option menu

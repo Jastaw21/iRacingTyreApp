@@ -5,11 +5,10 @@ RR = []
 
 
 def tyre_wear():
-    global tyre_variables
     wear_list = []
     tyre_wear_options = []
     corner_list = []
-    with open('vars.txt') as f:
+    with open(r'C:\Users\jacks\PycharmProjects\iRacingTyreApp\src\ir_vars\vars.txt') as f:
         vars_list = f.readlines()
 
     for string in vars_list:
