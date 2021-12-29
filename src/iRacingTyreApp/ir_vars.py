@@ -1,3 +1,5 @@
+import os
+
 LF = []
 LR = []
 RF = []
@@ -8,7 +10,9 @@ def tyre_wear():
     wear_list = []
     tyre_wear_options = []
     corner_list = []
-    with open('vars.txt') as f:
+    op = os.path
+    source_path = op.dirname(op.abspath(__file__))
+    with open(op.join(source_path, "vars.txt")) as f:
         vars_list = f.readlines()
 
     for string in vars_list:
