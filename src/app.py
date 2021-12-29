@@ -1,5 +1,5 @@
 import irsdk
-import src.ir_vars.ir_vars as vars
+import ir_vars
 
 
 # main class to be called from UI
@@ -9,8 +9,7 @@ class Driver:
         # info to drive setup
         self.full = (100, 100, 100)
         self.corners = ['LF', 'RF', 'LR', 'RR']
-        self.tyre_variables = vars.tyre_wear()  # grabs the values to pass to the SDK
-
+        self.tyre_variables = ir_vars.tyre_wear()
         # state variables - initialise as None. These get refreshed with every loop
         self.lap_dict = {}
         self.started_laps = None

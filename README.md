@@ -1,0 +1,1 @@
+This app will give you tyre wear from iRacing - into an app you can flick between stops in

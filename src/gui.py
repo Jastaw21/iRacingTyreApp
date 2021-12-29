@@ -1,7 +1,7 @@
 import tkinter as tk
 from datetime import datetime
-from src.app import app as tyre_app
-from src.ir_vars import ir_vars
+import app as tyre_app
+import ir_vars
 
 LABELS = ['LF', 'LR', 'RF', 'RR']
 
