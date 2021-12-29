@@ -43,7 +43,7 @@ class MainFrame(tk.Frame):  # holds all the shit on the left
 class RightFrame(tk.Frame):  # to hold the drop down
     def __init__(self, container):
         super().__init__(container)
-        self.stop_list = ['Initial', 'this is a local']
+        self.stop_list = ['Initial']
         self.configure(bg=options.colours['bg'])
         self.option = tk.StringVar(value='Initial')
         self.filler = tk.OptionMenu(self, self.option, *self.stop_list)
@@ -117,16 +117,22 @@ class App(tk.Tk):  # root window
 
 class Variables:
     def __init__(self):
-        self.local_stop_dict = ir_app.initial_tyres
-        self.local_stop_list = None
+        # lap info vars
+        self.current_tyres = None
+        self.iracing_state = None
+        self.completed_laps = None
+        self.last_lap_time = None
+        # grab the 'initial' data
+        self.local_stop_dict = ir_app.stop_lib
+        self.local_stop_list = [stop for stop in self.local_stop_dict.keys()]
+        # time, obvs
         self.time_now = datetime.now().strftime('%A %b %y %H:%M:%S')
-        self.iracing_state = 'test'
-        self.current_tyres = 'blank'
+
+        # where to find the class instances to update the frames
         self.labels = {'LF': mychildren.lf_frame, 'LR': mychildren.lr_frame,
                        'RF': mychildren.rf_frame, 'RR': mychildren.rr_frame}
 
-    def refresh_vars(self):
-
+    def local_loop(self):
         # call the main_loop of irSDK
         ir_app.main_loop()
 
@@ -135,25 +141,31 @@ class Variables:
         self.iracing_state = ir_app.ir_label
         self.current_tyres = ir_app.current_tyres
 
+        # update our list of stops so we can later compare them
         self.local_stop_list = [stop for stop in self.local_stop_dict.keys()]
+
+        # currently unutilised
+        self.last_lap_time = ir_app.last_lap_time
+        self.completed_laps = ir_app.completed_laps
 
         # check if there has been another stop, if so, update option menu
         if self.local_stop_list != mychildren.rightframe.stop_list:
-            mychildren.rightframe.refresh(self.local_stop_list)  # calls the function that refreshes
+            mychildren.rightframe.refresh(self.local_stop_list)  # probably not ideal but i think it works
         else:
             pass
 
         # call seperate function to update LABELS with refreshed info
-        self.set_labels(time=self.time_now, ir=self.iracing_state)
+        self.set_labels()
 
-        tyre_app.after(10, self.refresh_vars)
+        tyre_app.after(10, self.local_loop)
 
-    def set_labels(self, time, ir):
-        mychildren.gutter.time_label.configure(text=time)
-        mychildren.gutter.iracing_label.configure(text=ir)
+    def set_labels(self):
+        mychildren.gutter.time_label.configure(text=self.time_now)
+        mychildren.gutter.iracing_label.configure(text=self.iracing_state)
         optiontoshow = mychildren.rightframe.option.get()
-        # for value in self.LABELS.keys():
-        # self.LABELS[value].tyre_label.configure(text=self.local_stop_dict[optiontoshow][value])
+        stop_info = self.local_stop_dict[optiontoshow]
+        for value in self.labels.keys():
+            self.labels[value].tyre_label.configure(text=stop_info[0][value])
 
     def treat_wear(self, stop_values):
         pass
@@ -182,5 +194,5 @@ if __name__ == '__main__':
     tyre_app = App()
     mychildren = MYChildren()
     variables = Variables()
-    variables.refresh_vars()
+    variables.local_loop()
     tyre_app.mainloop()
