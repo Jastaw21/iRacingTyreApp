@@ -7,6 +7,7 @@ class Driver:
 
     def __init__(self):
         # info to drive setup
+        self.last_lap_time = None
         self.full = (100, 100, 100)
         self.corners = ['LF', 'RF', 'LR', 'RR']
         self.tyre_variables = ir_vars.tyre_wear()
@@ -20,11 +21,11 @@ class Driver:
         self.ir_label = 'iRacing Disconnected'
         self.in_box = 'Initialised'
         self.pit_count = 0
-        self.stop_lib = {}
+
         self.lap_count = 0
         self.initial_tyres, self.current_tyres = {i: self.full for i in self.corners}, \
                                                  {i: self.full for i in self.corners}
-
+        self.stop_lib = {'Initial': (self.initial_tyres, 0)}
         # initialise the SDK connection
         self.ir = irsdk.IRSDK()
 
@@ -84,7 +85,7 @@ class Driver:
                 self.stop_lib['Stop' + str(self.pit_count)] = (self.current_tyres, self.completed_laps)
                 # build our stop library
 
-        return self.stop_lib
+
 
     def lap_number(self):
         if self.ir_connected and self.ir['IsOnTrack']:
@@ -95,7 +96,8 @@ class Driver:
         if self.completed_laps < 1:
             pass
         else:
-            self.lap_dict[self.completed_laps] = self.ir['LapLastLapTime']
+            self.last_lap_time = self.ir['LapLastLapTime']
+            self.lap_dict[self.completed_laps] = self.last_lap_time
 
     def main_loop(self):
         if self.check_iracing():
