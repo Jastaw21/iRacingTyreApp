@@ -1,11 +1,12 @@
 import irsdk
 import ir_vars
 
-print('jw')
+
 # main class to be called from UI
 class Driver:
     def __init__(self):
         # info to drive setup
+        self.track_temp = None
         self.last_lap_time = None
         self.full = (100, 100, 100)
         self.corners = ["LF", "RF", "LR", "RR"]
@@ -110,7 +111,11 @@ class Driver:
             pass
         else:
             self.last_lap_time = self.ir["LapLastLapTime"]
-            self.lap_dict[self.completed_laps] = self.last_lap_time
+            self.track_temp = self.ir["TrackTempCrew"]
+            self.lap_dict[self.completed_laps] = {
+                "lap_time": self.last_lap_time,
+                "track_temp": self.track_temp,
+            }
 
     def main_loop(self):
         if self.check_iracing():

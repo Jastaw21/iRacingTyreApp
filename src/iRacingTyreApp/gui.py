@@ -3,7 +3,6 @@ from datetime import datetime
 import app as tyre_app
 import ir_vars
 
-
 LABELS = ["LF", "LR", "RF", "RR"]
 
 
@@ -15,16 +14,16 @@ class Options:  # Just to hold variables for GUI
 
     tyres = ir_vars.tyre_wear()
     info_for_creation = dict(
-        LF={"side": "left", "text": "LF", "container": "mf"},
-        RF={"side": "right", "text": "RF", "container": "mf"},
-        LR={"side": "left", "text": "LR", "container": "mf"},
-        RR={"side": "left", "text": "LF", "container": "mf"},
+        LF={"side": "left", "text": "LF", "Tparent": "mf"},
+        RF={"side": "right", "text": "RF", "Tparent": "mf"},
+        LR={"side": "left", "text": "LR", "Tparent": "mf"},
+        RR={"side": "left", "text": "LF", "Tparent": "mf"},
     )
 
 
 class Button(tk.Button):  # Quit Button
-    def __init__(self, container, button_text):
-        super().__init__(container)
+    def __init__(self, Tparent, button_text):
+        super().__init__(Tparent)
         self.butt = tk.Button
         self.configure(
             text=button_text,
@@ -38,8 +37,8 @@ class Button(tk.Button):  # Quit Button
 
 
 class MainFrame(tk.Frame):  # holds all the shit on the left
-    def __init__(self, container):
-        super().__init__(container)
+    def __init__(self, Tparent):
+        super().__init__(Tparent)
         self.configure(bg=options.colours["bg"])
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
@@ -49,8 +48,8 @@ class MainFrame(tk.Frame):  # holds all the shit on the left
 
 
 class RightFrame(tk.Frame):  # to hold the drop down
-    def __init__(self, container):
-        super().__init__(container)
+    def __init__(self, Tparent):
+        super().__init__(Tparent)
 
         self.stop_list = ["Initial"]  # will work out why I put this here
         self.configure(
@@ -72,7 +71,7 @@ class RightFrame(tk.Frame):  # to hold the drop down
         self.dropdown.pack(fill="both")
 
         # pack itself
-        self.pack(side="right", fill="y", **options.padding)
+        self.pack(side="top", fill="y", **options.padding)
 
     def refresh(self, stops):
         self.stop_list = stops
@@ -85,8 +84,8 @@ class RightFrame(tk.Frame):  # to hold the drop down
 
 
 class Gutter(tk.Frame):  # this is the bottom frame to contain time & IR state
-    def __init__(self, container):
-        super().__init__(container)
+    def __init__(self, Tparent):
+        super().__init__(Tparent)
         self.configure(bg=options.colours["bg"], borderwidth=3, relief="raised")
         # frame deets
 
@@ -105,8 +104,8 @@ class Gutter(tk.Frame):  # this is the bottom frame to contain time & IR state
 
 
 class TyreFrame(tk.Frame):  # Frames for each corner of the car
-    def __init__(self, container, text):
-        super().__init__(container)
+    def __init__(self, Tparent, text):
+        super().__init__(Tparent)
 
         self.gridding_info = {  # this drives the gridding info
             "LF": {"row": 1, "column": 1},
@@ -129,6 +128,15 @@ class TyreFrame(tk.Frame):  # Frames for each corner of the car
         self.tyre_label.pack()
 
         self.grid(**self.gridding_info[text], **options.padding)
+
+
+class ResultFrame(tk.Frame):
+    def __init__(self, Tparent):
+        super().__init__(Tparent)
+        self.configure(background="green")
+        self.text = tk.Label(self, text="jackaksfakdka")
+        self.text.pack()
+        self.pack(side="bottom", fill="both", expand="true")
 
 
 class App(tk.Tk):  # root window
@@ -181,17 +189,11 @@ class Variables:
         self.completed_laps = ir_app.completed_laps
 
         # check if there has been another stop, if so, update option menu
-        if self.local_stop_list != ch.rightframe.stop_list:
-            ch.rightframe.refresh(
-                self.local_stop_list
-            )  # probably not ideal but i think it works
-        else:
-            pass
+
+        self.refresh_stop_list()
 
         # call seperate function to update LABELS with refreshed info
         self.set_labels()
-        print("frame size: " + str(ch.mf.winfo_width()))
-        print(ch.lf_frame.winfo_width())
         tyre_app.after(1000, self.local_loop)  # loop it
 
     def set_labels(self):
@@ -202,6 +204,10 @@ class Variables:
         for value in self.labels.keys():
             self.labels[value].tyre_label.configure(text=stop_info[0][value])
 
+    def refresh_stop_list(self):
+        if self.local_stop_list != ch.rightframe.stop_list:
+            ch.rightframe.refresh(self.local_stop_list)
+
     def treat_wear(self, stop_values):
         pass
         # TODO
@@ -210,13 +216,14 @@ class Variables:
 class MYChildren:  # just to wrap the child widgets up in a class to avoid top level decs
     def __init__(self):
         self.button = Button(tyre_app, "Close")
-        self.gut = Gutter(container=tyre_app)
-        self.mf = MainFrame(container=tyre_app)
-        self.rightframe = RightFrame(container=tyre_app)
-        self.lf_frame = TyreFrame(container=self.mf, text="LF")
-        self.lr_frame = TyreFrame(container=self.mf, text="LR")
-        self.rf_frame = TyreFrame(container=self.mf, text="RF")
-        self.rr_frame = TyreFrame(container=self.mf, text="RR")
+        self.gut = Gutter(Tparent=tyre_app)
+        self.mf = MainFrame(Tparent=tyre_app)
+        self.rightframe = RightFrame(Tparent=tyre_app)
+        self.lf_frame = TyreFrame(Tparent=self.mf, text="LF")
+        self.lr_frame = TyreFrame(Tparent=self.mf, text="LR")
+        self.rf_frame = TyreFrame(Tparent=self.mf, text="RF")
+        self.rr_frame = TyreFrame(Tparent=self.mf, text="RR")
+        self.resf = ResultFrame(Tparent=self.rightframe)
 
 
 if __name__ == "__main__":
