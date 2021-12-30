@@ -71,7 +71,7 @@ class RightFrame(tk.Frame):  # to hold the drop down
         self.dropdown.pack(fill="both")
 
         # pack itself
-        self.pack(side="top", fill="y", **options.padding)
+        self.pack(fill="y", **options.padding)
 
     def refresh(self, stops):
         self.stop_list = stops
@@ -133,9 +133,16 @@ class TyreFrame(tk.Frame):  # Frames for each corner of the car
 class ResultFrame(tk.Frame):
     def __init__(self, Tparent):
         super().__init__(Tparent)
-        self.configure(background="green")
-        self.text = tk.Label(self, text="jackaksfakdka")
-        self.text.pack()
+        self.stint_length = tk.IntVar()
+
+        self.configure(bg=options.colours["bg"])
+        self.stint_length_label = tk.Label(
+            self, textvariable=self.stint_length, **options.colours
+        )
+        self.stint_length_label.grid(column=2, row=1)
+
+        self.stint_label = tk.Label(self, text="Stint Length:", **options.colours)
+        self.stint_label.grid(column=1, row=1)
         self.pack(side="bottom", fill="both", expand="true")
 
 
@@ -179,7 +186,7 @@ class Variables:
         # refresh session info
         self.time_now = datetime.now().strftime("%A %b %y %H:%M:%S")
         self.iracing_state = ir_app.ir_label
-        self.current_tyres = ir_app.current_tyres
+        self.current_tyres = ir_app.external_tyres
 
         # update our list of stops so we can later compare them
         self.local_stop_list = [stop for stop in self.local_stop_dict.keys()]
@@ -203,6 +210,7 @@ class Variables:
         stop_info = self.local_stop_dict[optiontoshow]
         for value in self.labels.keys():
             self.labels[value].tyre_label.configure(text=stop_info[0][value])
+        ch.resf.stint_length.set(stop_info[1])
 
     def refresh_stop_list(self):
         if self.local_stop_list != ch.rightframe.stop_list:
@@ -233,4 +241,5 @@ if __name__ == "__main__":
     ch = MYChildren()
     variables = Variables()
     variables.local_loop()
+
     tyre_app.mainloop()
