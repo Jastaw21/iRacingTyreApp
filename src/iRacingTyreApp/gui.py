@@ -31,7 +31,7 @@ class Button(tk.Button):  # Quit Button
             **options.colours,
             activeforeground=options.inv_colours["fg"],
             activebackground=options.inv_colours["bg"],
-            relief="raised"
+            relief="raised",
         )
         self.pack(fill="x", side="top")
 
@@ -62,7 +62,7 @@ class RightFrame(tk.Frame):  # to hold the drop down
         self.dropdown.configure(
             **options.colours,
             activebackground=options.inv_colours["bg"],
-            activeforeground=options.inv_colours["fg"]
+            activeforeground=options.inv_colours["fg"],
         )
         self.dropdown.children["menu"].configure(
             **options.colours, activebackground=options.inv_colours["bg"]
@@ -119,7 +119,10 @@ class TyreFrame(tk.Frame):  # Frames for each corner of the car
         # Constructs the variables to pass to  irsdk,
         # i.e LFwearM
         self.configure(
-            bg=options.colours["fg"], borderwidth=5, relief="raised", **options.padding
+            bg=options.colours["fg"],
+            borderwidth=5,
+            relief="raised",
+            **options.padding,
         )
 
         self.tyre_label = tk.Label(self, text=self.config)
@@ -205,7 +208,7 @@ class Variables:
         }
 
     def local_loop(self):
-        # call the main_loop of irSDK
+        # call the main_loop of irSDK - this will refresh all
         ir_app.main_loop()
 
         # refresh session info
@@ -221,7 +224,6 @@ class Variables:
         self.completed_laps = ir_app.completed_laps
 
         # check if there has been another stop, if so, update option menu
-
         self.refresh_stop_list()
 
         # call seperate function to update LABELS with refreshed info
@@ -229,6 +231,7 @@ class Variables:
         tyre_app.after(1000, self.local_loop)  # loop it
 
     def set_labels(self):
+        """iracing independent variables"""
         # set the gutter vars
         ch.gut.time_label.configure(text=self.time_now)
         ch.gut.iracing_label.configure(text=self.iracing_state)
@@ -240,18 +243,17 @@ class Variables:
             self.labels[value].tyre_label.configure(text=stop_info["wear"][value])
         ch.resf.stint_length.set(stop_info["length"])
 
-        # set track temp & session time
-
-        ch.resf.track_temp.set(ir_app.track_temp)
-        ch.resf.session_time.set(ir_app.session_time)
+        """iRacing Dependent variables, we need to check if iRacing is connected before doing anything"""
+        if ir_app.ir_connected:
+            ch.resf.track_temp.set(ir_app.track_tempVar)
+            ch.resf.session_time.set(ir_app.session_time)
+        else:
+            ch.resf.track_temp.set("No IR :(")
+            ch.resf.session_time.set("No IR :(")
 
     def refresh_stop_list(self):
         if self.local_stop_list != ch.rightframe.stop_list:
             ch.rightframe.refresh(self.local_stop_list)
-
-    def treat_wear(self, stop_values):
-        pass
-        # TODO
 
 
 class CH:  # just to wrap the child widgets up in a class to avoid top level decs

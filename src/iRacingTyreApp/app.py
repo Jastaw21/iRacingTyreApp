@@ -12,6 +12,8 @@ class StateVars:  # holds the data for
         # session info
         self.session_time = None
         self.track_tempVar = None
+        self.track_number = None
+        self.track_short = None
 
         # lap info
         self.last_lap_time = None
@@ -22,7 +24,7 @@ class StateVars:  # holds the data for
         # tyre info
         self.corners = ["LF", "RF", "LR", "RR"]
         self.full = [100, 100, 100]
-        self.initial_tyres = {i: self.full for i in self.corners}
+        self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
 
         # pitstop info
@@ -40,7 +42,7 @@ class StateVars:  # holds the data for
         self.lap_dict = {}
         self.corners = ["LF", "RF", "LR", "RR"]
         self.full = [100, 100, 100]
-        self.initial_tyres = {i: self.full for i in self.corners}
+        self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
         self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0})
 
@@ -146,6 +148,11 @@ class Driver(StateVars):  # main class to be called from UI
         track_temp_raw = self.ir["TrackTempCrew"]
         print(track_temp_raw)
         self.track_tempVar = track_temp_raw
+
+    # noinspection PyPep8Naming
+    def track_ID(self):
+        self.track_number = self.ir["WeekendInfo"]["TrackID"]
+        self.track_short = self.ir["WeekendInfo"]["TrackDisplayShortName"]
 
     # the main driver function - calls all the refreshing variables
     def main_loop(self):
