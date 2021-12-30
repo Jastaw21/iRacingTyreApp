@@ -7,18 +7,19 @@ LABELS = ["LF", "LR", "RF", "RR"]
 
 
 class Options:  # Just to hold variables for GUI
-    colours = dict(fg="#00313b", bg="#defcff")
-    inv_colours = {"fg": colours["bg"], "bg": colours["fg"]}
-    padding = dict(padx=1, pady=1)
-    large_padding = dict(padx=5, pady=5)
-
-    tyres = ir_vars.tyre_wear()
-    info_for_creation = dict(
-        LF={"side": "left", "text": "LF", "Tparent": "mf"},
-        RF={"side": "right", "text": "RF", "Tparent": "mf"},
-        LR={"side": "left", "text": "LR", "Tparent": "mf"},
-        RR={"side": "left", "text": "LF", "Tparent": "mf"},
-    )
+    def __init__(self):
+        self.colours = dict(fg="#00313b", bg="#defcff")
+        self.inv_colours = dict(fg=self.colours["bg"], bg=self.colours["fg"])
+        self.padding = dict(padx=1, pady=1)
+        self.large_padding = dict(padx=5, pady=5)
+        self.tyres = ir_vars.tyre_wear()
+        self.info_for_creation = dict(
+            LF={"side": "left", "text": "LF", "Tparent": "mf"},
+            RF={"side": "right", "text": "RF", "Tparent": "mf"},
+            LR={"side": "left", "text": "LR", "Tparent": "mf"},
+            RR={"side": "left", "text": "LF", "Tparent": "mf"},
+        )
+        self.no_ir_message = "where iR?"
 
 
 class Button(tk.Button):  # Quit Button
@@ -47,6 +48,7 @@ class MainFrame(tk.Frame):  # holds all the shit on the left
         self.pack(fill="both", side="left", expand="true")
 
 
+# noinspection PyUnresolvedReferences
 class RightFrame(tk.Frame):  # to hold the drop down
     def __init__(self, Tparent):
         super().__init__(Tparent)
@@ -138,6 +140,7 @@ class ResultFrame(tk.Frame):
         super().__init__(Tparent)
         self.stint_length = tk.IntVar()
         self.track_temp = tk.DoubleVar()
+        self.track = tk.StringVar()
 
         self.configure(bg=options.colours["bg"])
         # stint length pointer label
@@ -160,7 +163,6 @@ class ResultFrame(tk.Frame):
             self, textvariable=self.track_temp, **options.colours
         )
         self.track_temp_value.grid(row=2, column=2)
-        self.pack(side="bottom", fill="both", expand="true")
 
         # session time pointer label
         self.session_time = tk.StringVar()
@@ -172,6 +174,12 @@ class ResultFrame(tk.Frame):
             self, textvariable=self.session_time, **options.colours
         )
         self.sess_time_value.grid(row=3, column=2)
+
+        self.track_pointer = tk.Label(self, text="Track:", **options.colours)
+        self.track_label = tk.Label(self, textvariable=self.track, **options.colours)
+        self.track_pointer.grid(row=4, column=1)
+        self.track_label.grid(row=4, column=2)
+        self.pack(side="bottom", fill="both", expand="true")
 
 
 class App(tk.Tk):  # root window
@@ -231,8 +239,7 @@ class Variables:
         tyre_app.after(1000, self.local_loop)  # loop it
 
     def set_labels(self):
-        """iracing independent variables"""
-        # set the gutter vars
+        # iracing independent variables
         ch.gut.time_label.configure(text=self.time_now)
         ch.gut.iracing_label.configure(text=self.iracing_state)
 
@@ -243,13 +250,15 @@ class Variables:
             self.labels[value].tyre_label.configure(text=stop_info["wear"][value])
         ch.resf.stint_length.set(stop_info["length"])
 
-        """iRacing Dependent variables, we need to check if iRacing is connected before doing anything"""
+        # iRacing Dependent variables, we need to check if iRacing is connected before doing anything
         if ir_app.ir_connected:
             ch.resf.track_temp.set(ir_app.track_tempVar)
             ch.resf.session_time.set(ir_app.session_time)
+            ch.resf.track.set(ir_app.track_short)
         else:
-            ch.resf.track_temp.set("No IR :(")
-            ch.resf.session_time.set("No IR :(")
+            ch.resf.track_temp.set(options.no_ir_message)
+            ch.resf.session_time.set(options.no_ir_message)
+            ch.resf.track.set(options.no_ir_message)
 
     def refresh_stop_list(self):
         if self.local_stop_list != ch.rightframe.stop_list:
@@ -270,7 +279,7 @@ class CH:  # just to wrap the child widgets up in a class to avoid top level dec
 
 
 if __name__ == "__main__":
-    options = Options
+    options = Options()
     ir_state = tyre_app.StateVars()
     ir_app = tyre_app.Driver()
     tyre_app = App()

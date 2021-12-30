@@ -149,7 +149,6 @@ class Driver(StateVars):  # main class to be called from UI
         print(track_temp_raw)
         self.track_tempVar = track_temp_raw
 
-    # noinspection PyPep8Naming
     def track_ID(self):
         self.track_number = self.ir["WeekendInfo"]["TrackID"]
         self.track_short = self.ir["WeekendInfo"]["TrackDisplayShortName"]
