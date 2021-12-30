@@ -134,16 +134,41 @@ class ResultFrame(tk.Frame):
     def __init__(self, Tparent):
         super().__init__(Tparent)
         self.stint_length = tk.IntVar()
+        self.track_temp = tk.DoubleVar()
 
         self.configure(bg=options.colours["bg"])
+        # stint length pointer label
         self.stint_length_label = tk.Label(
             self, textvariable=self.stint_length, **options.colours
         )
+
         self.stint_length_label.grid(column=2, row=1)
 
+        # stint length value label
         self.stint_label = tk.Label(self, text="Stint Length:", **options.colours)
         self.stint_label.grid(column=1, row=1)
+
+        # track temp pointer label
+        self.track_temp_pointer = tk.Label(self, text="Track Temp:", **options.colours)
+        self.track_temp_pointer.grid(row=2, column=1)
+
+        # track temp value label
+        self.track_temp_value = tk.Label(
+            self, textvariable=self.track_temp, **options.colours
+        )
+        self.track_temp_value.grid(row=2, column=2)
         self.pack(side="bottom", fill="both", expand="true")
+
+        # session time pointer label
+        self.session_time = tk.StringVar()
+        self.sess_time_pointer = tk.Label(self, text="Session Time:", **options.colours)
+        self.sess_time_pointer.grid(row=3, column=1)
+
+        # session time value label
+        self.sess_time_value = tk.Label(
+            self, textvariable=self.session_time, **options.colours
+        )
+        self.sess_time_value.grid(row=3, column=2)
 
 
 class App(tk.Tk):  # root window
@@ -186,7 +211,7 @@ class Variables:
         # refresh session info
         self.time_now = datetime.now().strftime("%A %b %y %H:%M:%S")
         self.iracing_state = ir_app.ir_label
-        self.current_tyres = ir_app.external_tyres
+        self.current_tyres = ir_app.current_tyres
 
         # update our list of stops so we can later compare them
         self.local_stop_list = [stop for stop in self.local_stop_dict.keys()]
@@ -204,13 +229,21 @@ class Variables:
         tyre_app.after(1000, self.local_loop)  # loop it
 
     def set_labels(self):
+        # set the gutter vars
         ch.gut.time_label.configure(text=self.time_now)
         ch.gut.iracing_label.configure(text=self.iracing_state)
+
+        # bring info from option menu and handle
         optiontoshow = ch.rightframe.option.get()
         stop_info = self.local_stop_dict[optiontoshow]
         for value in self.labels.keys():
-            self.labels[value].tyre_label.configure(text=stop_info[0][value])
-        ch.resf.stint_length.set(stop_info[1])
+            self.labels[value].tyre_label.configure(text=stop_info["wear"][value])
+        ch.resf.stint_length.set(stop_info["length"])
+
+        # set track temp & session time
+
+        ch.resf.track_temp.set(ir_app.track_temp)
+        ch.resf.session_time.set(ir_app.session_time)
 
     def refresh_stop_list(self):
         if self.local_stop_list != ch.rightframe.stop_list:
@@ -221,7 +254,7 @@ class Variables:
         # TODO
 
 
-class MYChildren:  # just to wrap the child widgets up in a class to avoid top level decs
+class CH:  # just to wrap the child widgets up in a class to avoid top level decs
     def __init__(self):
         self.button = Button(tyre_app, "Close")
         self.gut = Gutter(Tparent=tyre_app)
@@ -236,9 +269,10 @@ class MYChildren:  # just to wrap the child widgets up in a class to avoid top l
 
 if __name__ == "__main__":
     options = Options
+    ir_state = tyre_app.StateVars()
     ir_app = tyre_app.Driver()
     tyre_app = App()
-    ch = MYChildren()
+    ch = CH()
     variables = Variables()
     variables.local_loop()
 
