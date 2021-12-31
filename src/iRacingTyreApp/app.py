@@ -1,5 +1,7 @@
 import time
+
 import irsdk
+
 import ir_vars
 
 
@@ -68,10 +70,10 @@ class Driver(StateVars):  # main class to be called from UI
             self.ir_connected = False
             return False
         elif (
-            not self.ir_connected
-            and self.ir.startup()
-            and self.ir.is_connected
-            and self.ir.is_initialized
+                not self.ir_connected
+                and self.ir.startup()
+                and self.ir.is_connected
+                and self.ir.is_initialized
         ):
             self.ir_connected = True
             self.ir_label = "iRacing Connected"
@@ -101,7 +103,7 @@ class Driver(StateVars):  # main class to be called from UI
     # this updates our tyre wear variables, and if they've changed, i.e we've done a pitstop, add to stop dict
     def update_tyre_state(self):
         if (
-            self.check_in_box() or self.ir["OnPitRoad"]
+                self.check_in_box() or self.ir["OnPitRoad"]
         ):  # if we're not in the box, don't do anything
 
             # get the tyre info
@@ -146,8 +148,7 @@ class Driver(StateVars):  # main class to be called from UI
 
     def track_temp(self):
         track_temp_raw = self.ir["TrackTempCrew"]
-        print(track_temp_raw)
-        self.track_tempVar = track_temp_raw
+        self.track_tempVar = round(track_temp_raw,2)
 
     def track_ID(self):
         self.track_number = self.ir["WeekendInfo"]["TrackID"]
@@ -159,6 +160,8 @@ class Driver(StateVars):  # main class to be called from UI
             self.set_session_time()
             self.update_tyre_state()
             self.track_temp()
+            self.track_ID()
+            self.lap_number()
             self.lap_time()
 
 
