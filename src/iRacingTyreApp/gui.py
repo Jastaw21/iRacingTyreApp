@@ -2,12 +2,15 @@ import tkinter as tk
 from datetime import datetime
 import app as tyre_app
 import ir_vars
+import config as CFG
 
 LABELS = ["LF", "LR", "RF", "RR"]
 
 
 class Options:  # Just to hold variables for GUI
     def __init__(self):
+        self.cfg = CFG.AppConfig()
+        self.config = self.cfg.config_dict
         self.colours = dict(fg="#00313b", bg="#defcff")
         self.inv_colours = dict(fg=self.colours["bg"], bg=self.colours["fg"])
         self.padding = dict(padx=1, pady=1)
@@ -128,7 +131,7 @@ class TyreFrame(tk.Frame):  # Frames for each corner of the car
         )
 
         self.tyre_label = tk.Label(self, text=self.config)
-        self.tyre_label.configure(**options.inv_colours, font=50, width=10, height=9)
+        self.tyre_label.configure(**options.inv_colours, width=10, height=9)
 
         self.tyre_label.pack()
 
