@@ -80,6 +80,8 @@ class Driver(StateVars):  # main class to be called from UI
             return True
         elif self.ir_connected and self.ir.is_initialized and self.ir.is_connected:
             return True
+        else:
+            return False
 
     # checks if we're in the box - use this to decide whether to bother grabbing tyre info
     def check_in_box(self):
@@ -136,21 +138,19 @@ class Driver(StateVars):  # main class to be called from UI
         time_in_secs = self.ir["SessionTimeOfDay"]
         self.session_time = time.strftime("%H:%M:%S", time.gmtime(time_in_secs))
 
-    def lap_time(self):
-
+    def lap_time(self): # in loop
         if self.completed_laps > 0:
             self.last_lap_time = self.ir["LapLastLapTime"]
-
             self.lap_dict[self.completed_laps] = {
                 "lap_time": self.last_lap_time,
                 "track_temp": self.track_temp,
             }
 
-    def track_temp(self):
+    def track_temp(self): # in lop
         track_temp_raw = self.ir["TrackTempCrew"]
         self.track_tempVar = round(track_temp_raw,2)
 
-    def track_ID(self):
+    def track_ID(self): # in loop
         self.track_number = self.ir["WeekendInfo"]["TrackID"]
         self.track_short = self.ir["WeekendInfo"]["TrackDisplayShortName"]
 
@@ -167,6 +167,6 @@ class Driver(StateVars):  # main class to be called from UI
 
 if __name__ == "__main__":
     d = Driver()
-    for i in range(10):
+    while True:
         d.main_loop()
         time.sleep(1)
