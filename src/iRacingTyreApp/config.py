@@ -1,8 +1,14 @@
 import configparser
 
-config = configparser.ConfigParser()
 
-opts = config.read('config.ini')
+class AppConfig:
+    def __init__(self):
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
+        self.config_dict = self.config._sections
 
-name = config['common']['jack']
-print(name)
+
+
+
+
+
