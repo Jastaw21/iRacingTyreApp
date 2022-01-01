@@ -233,7 +233,7 @@ class Variables:
 
         # call seperate function to update LABELS with refreshed info
         self.set_labels()
-        tyre_app.after(1000, self.local_loop)  # loop it
+        tyre_app.after(5, self.local_loop)  # loop it
 
     def set_labels(self):
         # iracing independent variables
@@ -262,7 +262,7 @@ class Variables:
             ch.rightframe.refresh(self.local_stop_list)
 
 
-class CH:  # just to wrap the child widgets up in a class to avoid top level decs
+class ChildWidgets:  # just to wrap the child widgets up in a class to avoid top level decs
     def __init__(self):
         self.button = Button(tyre_app, "Close")
         self.gut = Gutter(Tparent=tyre_app)
@@ -280,8 +280,7 @@ if __name__ == "__main__":
     ir_state = tyre_app.StateVars()
     ir_app = tyre_app.Driver()
     tyre_app = App()
-    ch = CH()
+    ch = ChildWidgets()
     variables = Variables()
     variables.local_loop()
-
     tyre_app.mainloop()

@@ -102,11 +102,8 @@ class Driver(StateVars):  # main class to be called from UI
             tyre_wear[corner] = working_list
         return tyre_wear
 
-    # this updates our tyre wear variables, and if they've changed, i.e we've done a pitstop, add to stop dict
     def update_tyre_state(self):
-        if (
-                self.check_in_box() or self.ir["OnPitRoad"]
-        ):  # if we're not in the box, don't do anything
+        if self.check_in_box() or self.ir["OnPitRoad"]:  # if we're not in the box, don't do anything
 
             # get the tyre info
             local_tyre_state = self.get_tyres_state()
@@ -130,7 +127,7 @@ class Driver(StateVars):  # main class to be called from UI
         self.last_stop_lap = self.completed_laps
 
     def lap_number(self):
-        if self.ir_connected and self.ir["IsOnTrack"]:
+        if self.ir["IsOnTrack"]:
             self.completed_laps = self.ir["LapCompleted"]
             self.started_laps = self.ir["Lap"]
 
@@ -138,19 +135,17 @@ class Driver(StateVars):  # main class to be called from UI
         time_in_secs = self.ir["SessionTimeOfDay"]
         self.session_time = time.strftime("%H:%M:%S", time.gmtime(time_in_secs))
 
-    def lap_time(self): # in loop
+    def lap_time(self):  # in loop
         if self.completed_laps > 0:
             self.last_lap_time = self.ir["LapLastLapTime"]
-            self.lap_dict[self.completed_laps] = {
-                "lap_time": self.last_lap_time,
-                "track_temp": self.track_temp,
-            }
+            self.lap_dict[self.completed_laps] = \
+                dict(lap_time=self.last_lap_time, track_temp=self.track_temp)
 
-    def track_temp(self): # in lop
+    def track_temp(self):  # in loop
         track_temp_raw = self.ir["TrackTempCrew"]
-        self.track_tempVar = round(track_temp_raw,2)
+        self.track_tempVar = round(track_temp_raw, 2)
 
-    def track_ID(self): # in loop
+    def track_ID(self):  # in loop
         self.track_number = self.ir["WeekendInfo"]["TrackID"]
         self.track_short = self.ir["WeekendInfo"]["TrackDisplayShortName"]
 
