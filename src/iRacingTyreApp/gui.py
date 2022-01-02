@@ -7,6 +7,19 @@ import config as CFG
 LABELS = ["LF", "LR", "RF", "RR"]
 
 
+class App(tk.Tk):  # root window
+    def __init__(self):
+        super().__init__()
+        self.options = Options()
+        self.title("NRG Tyre App")
+        self.configure(bg=self.options.colours["bg"])
+        self.minsize(300, 150)
+
+    def my_destroy(self):
+        ir_app.internal_shutdown()
+        self.destroy()
+
+
 class Options:  # Just to hold variables for GUI
     def __init__(self):
         self.cfg = CFG.AppConfig()
@@ -32,9 +45,9 @@ class Button(tk.Button):  # Quit Button
         self.configure(
             text=button_text,
             command=tyre_app.destroy,
-            **options.colours,
-            activeforeground=options.inv_colours["fg"],
-            activebackground=options.inv_colours["bg"],
+            **tyre_app.options.colours,
+            activeforeground=tyre_app.options.inv_colours["fg"],
+            activebackground=tyre_app.options.inv_colours["bg"],
             relief="raised",
         )
         self.pack(fill="x", side="top")
@@ -43,7 +56,7 @@ class Button(tk.Button):  # Quit Button
 class MainFrame(tk.Frame):  # holds all the shit on the left
     def __init__(self, Tparent):
         super().__init__(Tparent)
-        self.configure(bg=options.colours["bg"])
+        self.configure(bg=tyre_app.options.colours["bg"])
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
         self.rowconfigure(1, weight=1)
@@ -58,25 +71,25 @@ class RightFrame(tk.Frame):  # to hold the drop down
 
         self.stop_list = ["Initial"]  # will work out why I put this here
         self.configure(
-            bg=options.colours["bg"], relief="raised", borderwidth=2
+            bg=tyre_app.options.colours["bg"], relief="raised", borderwidth=2
         )  # this is the frame
 
         # option menu options
         self.option = tk.StringVar(value="Initial")
         self.dropdown = tk.OptionMenu(self, self.option, *self.stop_list)
         self.dropdown.configure(
-            **options.colours,
-            activebackground=options.inv_colours["bg"],
-            activeforeground=options.inv_colours["fg"],
+            **tyre_app.options.colours,
+            activebackground=tyre_app.options.inv_colours["bg"],
+            activeforeground=tyre_app.options.inv_colours["fg"],
         )
         self.dropdown.children["menu"].configure(
-            **options.colours, activebackground=options.inv_colours["bg"]
+            **tyre_app.options.colours, activebackground=tyre_app.options.inv_colours["bg"]
         )
 
         self.dropdown.pack(fill="both")
 
         # pack itself
-        self.pack(fill="y", **options.padding)
+        self.pack(fill="y", **tyre_app.options.padding)
 
     def refresh(self, stops):
         self.stop_list = stops
@@ -91,21 +104,21 @@ class RightFrame(tk.Frame):  # to hold the drop down
 class Gutter(tk.Frame):  # this is the bottom frame to contain time & IR state
     def __init__(self, Tparent):
         super().__init__(Tparent)
-        self.configure(bg=options.colours["bg"], borderwidth=3, relief="raised")
+        self.configure(bg=tyre_app.options.colours["bg"], borderwidth=3, relief="raised")
         # frame deets
 
         # time label
         self.time_label = tk.Label(self, text="TODO")
-        self.time_label.configure(**options.colours)
+        self.time_label.configure(**tyre_app.options.colours)
 
         # iracing state label
         self.iracing_label = tk.Label(self, text="")
-        self.iracing_label.configure(**options.colours)
+        self.iracing_label.configure(**tyre_app.options.colours)
 
         # packs
-        self.iracing_label.pack(**options.padding, side="right")
-        self.time_label.pack(**options.padding, side="left")
-        self.pack(**options.padding, side="bottom", fill="x")
+        self.iracing_label.pack(**tyre_app.options.padding, side="right")
+        self.time_label.pack(**tyre_app.options.padding, side="left")
+        self.pack(**tyre_app.options.padding, side="bottom", fill="x")
 
 
 class TyreFrame(tk.Frame):  # Frames for each corner of the car
@@ -124,18 +137,18 @@ class TyreFrame(tk.Frame):  # Frames for each corner of the car
         # Constructs the variables to pass to  irsdk,
         # i.e LFwearM
         self.configure(
-            bg=options.colours["fg"],
+            bg=tyre_app.options.colours["fg"],
             borderwidth=5,
             relief="raised",
-            **options.padding,
+            **tyre_app.options.padding,
         )
 
         self.tyre_label = tk.Label(self, text=self.config)
-        self.tyre_label.configure(**options.inv_colours, width=10, height=9)
+        self.tyre_label.configure(**tyre_app.options.inv_colours, width=10, height=9)
 
         self.tyre_label.pack()
 
-        self.grid(**self.gridding_info[text], **options.padding)
+        self.grid(**self.gridding_info[text], **tyre_app.options.padding)
 
 
 class ResultFrame(tk.Frame):
@@ -144,51 +157,39 @@ class ResultFrame(tk.Frame):
         self.stint_length = tk.IntVar()
         self.track_temp = tk.DoubleVar()
         self.track = tk.StringVar()
-        self.configure(bg=options.colours["bg"])
+        self.configure(bg=tyre_app.options.colours["bg"])
 
         # stint length pointer label
-        self.stint_length_label = tk.Label(self, textvariable=self.stint_length, **options.colours)
+        self.stint_length_label = tk.Label(self, textvariable=self.stint_length, **tyre_app.options.colours)
         self.stint_length_label.grid(column=2, row=1, sticky='e')
         # stint length value label
-        self.stint_label = tk.Label(self, text="Stint Length:", **options.colours)
+        self.stint_label = tk.Label(self, text="Stint Length:", **tyre_app.options.colours)
         self.stint_label.grid(column=1, row=1, sticky='w')
 
         # track temp pointer label
-        self.track_temp_pointer = tk.Label(self, text="Track Temp:", **options.colours)
+        self.track_temp_pointer = tk.Label(self, text="Track Temp:", **tyre_app.options.colours)
         self.track_temp_pointer.grid(row=2, column=1, sticky='w')
         # track temp value label
-        self.track_temp_value = tk.Label(self, textvariable=self.track_temp, **options.colours)
+        self.track_temp_value = tk.Label(self, textvariable=self.track_temp, **tyre_app.options.colours)
         self.track_temp_value.grid(row=2, column=2, sticky='e')
 
         # session time pointer label
         self.session_time = tk.StringVar()
-        self.sess_time_pointer = tk.Label(self, text="Session Time:", **options.colours)
+        self.sess_time_pointer = tk.Label(self, text="Session Time:", **tyre_app.options.colours)
         self.sess_time_pointer.grid(row=3, column=1, sticky='w')
         # session time value label
-        self.sess_time_value = tk.Label(self, textvariable=self.session_time, **options.colours)
+        self.sess_time_value = tk.Label(self, textvariable=self.session_time, **tyre_app.options.colours)
         self.sess_time_value.grid(row=3, column=2, sticky='e')
 
         # track info pointer
-        self.track_pointer = tk.Label(self, text="Track:", **options.colours)
+        self.track_pointer = tk.Label(self, text="Track:", **tyre_app.options.colours)
         self.track_pointer.grid(row=4, column=1, sticky='w')
         # track info value
-        self.track_label = tk.Label(self, textvariable=self.track, **options.colours)
+        self.track_label = tk.Label(self, textvariable=self.track, **tyre_app.options.colours)
         self.track_label.grid(row=4, column=2, sticky='e')
 
         # self pack
         self.pack(side="bottom", fill="both", expand="true")
-
-
-class App(tk.Tk):  # root window
-    def __init__(self):
-        super().__init__()
-        self.title("NRG Tyre App")
-        self.configure(bg=options.colours["bg"])
-        self.minsize(300, 150)
-
-    def my_destroy(self):
-        ir_app.internal_shutdown()
-        self.destroy()
 
 
 class Variables:
@@ -253,9 +254,9 @@ class Variables:
             ch.resf.session_time.set(ir_app.session_time)
             ch.resf.track.set(ir_app.track_short)
         else:
-            ch.resf.track_temp.set(options.no_ir_message)
-            ch.resf.session_time.set(options.no_ir_message)
-            ch.resf.track.set(options.no_ir_message)
+            ch.resf.track_temp.set(tyre_app.options.no_ir_message)
+            ch.resf.session_time.set(tyre_app.options.no_ir_message)
+            ch.resf.track.set(tyre_app.options.no_ir_message)
 
     def refresh_stop_list(self):
         if self.local_stop_list != ch.rightframe.stop_list:
@@ -276,7 +277,6 @@ class ChildWidgets:  # just to wrap the child widgets up in a class to avoid top
 
 
 if __name__ == "__main__":
-    options = Options()
     ir_state = tyre_app.StateVars()
     ir_app = tyre_app.Driver()
     tyre_app = App()
