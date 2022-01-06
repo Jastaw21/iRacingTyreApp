@@ -1,6 +1,6 @@
 import tkinter as tk
 from datetime import datetime
-import app as irDriver
+import app as irta
 import ir_vars
 import config as CFG
 
@@ -14,7 +14,8 @@ class App(tk.Tk):  # root window
         self.title("NRG Tyre App")
         self.configure(bg=self.options.colours["bg"])
         self.minsize(300, 150)
-        self.ir_app = irDriver.Driver()
+        self.ir_app = irta.Driver()
+
 
     def my_destroy(self):
         ir_app.internal_shutdown()
@@ -45,10 +46,10 @@ class Button(tk.Button):  # Quit Button
         self.butt = tk.Button
         self.configure(
             text=button_text,
-            command=irDriver.destroy,
-            **irDriver.options.colours,
-            activeforeground=irDriver.options.inv_colours["fg"],
-            activebackground=irDriver.options.inv_colours["bg"],
+            command=gui.destroy,
+            **gui.options.colours,
+            activeforeground=gui.options.inv_colours["fg"],
+            activebackground=gui.options.inv_colours["bg"],
             relief="raised",
         )
         self.pack(fill="x", side="top")
@@ -57,7 +58,7 @@ class Button(tk.Button):  # Quit Button
 class MainFrame(tk.Frame):  # holds all the shit on the left
     def __init__(self, Tparent):
         super().__init__(Tparent)
-        self.configure(bg=irDriver.options.colours["bg"])
+        self.configure(bg=gui.options.colours["bg"])
         self.columnconfigure(1, weight=1)
         self.columnconfigure(2, weight=1)
         self.rowconfigure(1, weight=1)
@@ -72,25 +73,25 @@ class RightFrame(tk.Frame):  # to hold the drop down
 
         self.stop_list = ["Initial"]  # will work out why I put this here
         self.configure(
-            bg=irDriver.options.colours["bg"], relief="raised", borderwidth=2
+            bg=gui.options.colours["bg"], relief="raised", borderwidth=2
         )  # this is the frame
 
         # option menu options
         self.option = tk.StringVar(value="Initial")
         self.dropdown = tk.OptionMenu(self, self.option, *self.stop_list)
         self.dropdown.configure(
-            **irDriver.options.colours,
-            activebackground=irDriver.options.inv_colours["bg"],
-            activeforeground=irDriver.options.inv_colours["fg"],
+            **gui.options.colours,
+            activebackground=gui.options.inv_colours["bg"],
+            activeforeground=gui.options.inv_colours["fg"],
         )
         self.dropdown.children["menu"].configure(
-            **irDriver.options.colours, activebackground=irDriver.options.inv_colours["bg"]
+            **gui.options.colours, activebackground=gui.options.inv_colours["bg"]
         )
 
         self.dropdown.pack(fill="both")
 
         # pack itself
-        self.pack(fill="y", **irDriver.options.padding)
+        self.pack(fill="y", **gui.options.padding)
 
     def refresh(self, stops):
         self.stop_list = stops
@@ -105,21 +106,21 @@ class RightFrame(tk.Frame):  # to hold the drop down
 class Gutter(tk.Frame):  # this is the bottom frame to contain time & IR state
     def __init__(self, Tparent):
         super().__init__(Tparent)
-        self.configure(bg=irDriver.options.colours["bg"], borderwidth=3, relief="raised")
+        self.configure(bg=gui.options.colours["bg"], borderwidth=3, relief="raised")
         # frame deets
 
         # time label
         self.time_label = tk.Label(self, text="TODO")
-        self.time_label.configure(**irDriver.options.colours)
+        self.time_label.configure(**gui.options.colours)
 
         # iracing state label
         self.iracing_label = tk.Label(self, text="")
-        self.iracing_label.configure(**irDriver.options.colours)
+        self.iracing_label.configure(**gui.options.colours)
 
         # packs
-        self.iracing_label.pack(**irDriver.options.padding, side="right")
-        self.time_label.pack(**irDriver.options.padding, side="left")
-        self.pack(**irDriver.options.padding, side="bottom", fill="x")
+        self.iracing_label.pack(**gui.options.padding, side="right")
+        self.time_label.pack(**gui.options.padding, side="left")
+        self.pack(**gui.options.padding, side="bottom", fill="x")
 
 
 class TyreFrame(tk.Frame):  # Frames for each corner of the car
@@ -138,18 +139,18 @@ class TyreFrame(tk.Frame):  # Frames for each corner of the car
         # Constructs the variables to pass to  irsdk,
         # i.e LFwearM
         self.configure(
-            bg=irDriver.options.colours["fg"],
+            bg=gui.options.colours["fg"],
             borderwidth=5,
             relief="raised",
-            **irDriver.options.padding,
+            **gui.options.padding,
         )
 
         self.tyre_label = tk.Label(self, text=self.config)
-        self.tyre_label.configure(**irDriver.options.inv_colours, width=10, height=9)
+        self.tyre_label.configure(**gui.options.inv_colours, width=10, height=9)
 
         self.tyre_label.pack()
 
-        self.grid(**self.gridding_info[text], **irDriver.options.padding)
+        self.grid(**self.gridding_info[text], **gui.options.padding)
 
 
 class ResultFrame(tk.Frame):
@@ -158,35 +159,35 @@ class ResultFrame(tk.Frame):
         self.stint_length = tk.IntVar()
         self.track_temp = tk.DoubleVar()
         self.track = tk.StringVar()
-        self.configure(bg=irDriver.options.colours["bg"])
+        self.configure(bg=gui.options.colours["bg"])
 
         # stint length pointer label
-        self.stint_length_label = tk.Label(self, textvariable=self.stint_length, **irDriver.options.colours)
+        self.stint_length_label = tk.Label(self, textvariable=self.stint_length, **gui.options.colours)
         self.stint_length_label.grid(column=2, row=1, sticky='e')
         # stint length value label
-        self.stint_label = tk.Label(self, text="Stint Length:", **irDriver.options.colours)
+        self.stint_label = tk.Label(self, text="Stint Length:", **gui.options.colours)
         self.stint_label.grid(column=1, row=1, sticky='w')
 
         # track temp pointer label
-        self.track_temp_pointer = tk.Label(self, text="Track Temp:", **irDriver.options.colours)
+        self.track_temp_pointer = tk.Label(self, text="Track Temp:", **gui.options.colours)
         self.track_temp_pointer.grid(row=2, column=1, sticky='w')
         # track temp value label
-        self.track_temp_value = tk.Label(self, textvariable=self.track_temp, **irDriver.options.colours)
+        self.track_temp_value = tk.Label(self, textvariable=self.track_temp, **gui.options.colours)
         self.track_temp_value.grid(row=2, column=2, sticky='e')
 
         # session time pointer label
         self.session_time = tk.StringVar()
-        self.sess_time_pointer = tk.Label(self, text="Session Time:", **irDriver.options.colours)
+        self.sess_time_pointer = tk.Label(self, text="Session Time:", **gui.options.colours)
         self.sess_time_pointer.grid(row=3, column=1, sticky='w')
         # session time value label
-        self.sess_time_value = tk.Label(self, textvariable=self.session_time, **irDriver.options.colours)
+        self.sess_time_value = tk.Label(self, textvariable=self.session_time, **gui.options.colours)
         self.sess_time_value.grid(row=3, column=2, sticky='e')
 
         # track info pointer
-        self.track_pointer = tk.Label(self, text="Track:", **irDriver.options.colours)
+        self.track_pointer = tk.Label(self, text="Track:", **gui.options.colours)
         self.track_pointer.grid(row=4, column=1, sticky='w')
         # track info value
-        self.track_label = tk.Label(self, textvariable=self.track, **irDriver.options.colours)
+        self.track_label = tk.Label(self, textvariable=self.track, **gui.options.colours)
         self.track_label.grid(row=4, column=2, sticky='e')
 
         # self pack
@@ -235,7 +236,7 @@ class Variables:
 
         # call seperate function to update LABELS with refreshed info
         self.set_labels()
-        irDriver.after(5, self.local_loop)  # loop it
+        gui.after(5, self.local_loop)  # loop it
 
     def set_labels(self):
         # iracing independent variables
@@ -255,9 +256,9 @@ class Variables:
             ch.resf.session_time.set(ir_app.session_time)
             ch.resf.track.set(ir_app.track_short)
         else:
-            ch.resf.track_temp.set(irDriver.options.no_ir_message)
-            ch.resf.session_time.set(irDriver.options.no_ir_message)
-            ch.resf.track.set(irDriver.options.no_ir_message)
+            ch.resf.track_temp.set(gui.options.no_ir_message)
+            ch.resf.session_time.set(gui.options.no_ir_message)
+            ch.resf.track.set(gui.options.no_ir_message)
 
     def refresh_stop_list(self):
         if self.local_stop_list != ch.rightframe.stop_list:
@@ -266,10 +267,10 @@ class Variables:
 
 class ChildWidgets:  # just to wrap the child widgets up in a class to avoid top level decs
     def __init__(self):
-        self.button = Button(irDriver, "Close")
-        self.gut = Gutter(Tparent=irDriver)
-        self.mf = MainFrame(Tparent=irDriver)
-        self.rightframe = RightFrame(Tparent=irDriver)
+        self.button = Button(gui, "Close")
+        self.gut = Gutter(Tparent=gui)
+        self.mf = MainFrame(Tparent=gui)
+        self.rightframe = RightFrame(Tparent=gui)
         self.lf_frame = TyreFrame(Tparent=self.mf, text="LF")
         self.lr_frame = TyreFrame(Tparent=self.mf, text="LR")
         self.rf_frame = TyreFrame(Tparent=self.mf, text="RF")
@@ -278,9 +279,9 @@ class ChildWidgets:  # just to wrap the child widgets up in a class to avoid top
 
 
 if __name__ == "__main__":
-    ir_app = irDriver.Driver()
-    irDriver = App()
+    ir_app = irta.Driver()
+    gui = App()
     ch = ChildWidgets()
     variables = Variables()
     variables.local_loop()
-    irDriver.mainloop()
+    gui.mainloop()
