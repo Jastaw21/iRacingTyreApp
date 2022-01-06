@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="misc">
-      <change afterPath="$PROJECT_DIR$/src/iRacingTyreApp/config.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/iRacingTyreApp/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -38,7 +35,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.config">
+  <component name="RunManager" selected="Python.gui">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pythonProject" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -104,8 +101,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.config" />
         <item itemvalue="Python.gui" />
+        <item itemvalue="Python.config" />
         <item itemvalue="Python.app" />
       </list>
     </recent_temporary>
@@ -133,7 +130,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640817777233</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="misc">
+      <created>1641063431190</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1641063431190</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
