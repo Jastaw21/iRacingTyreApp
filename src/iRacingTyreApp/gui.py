@@ -16,7 +16,6 @@ class App(tk.Tk):  # root window
         self.minsize(300, 150)
         self.ir_app = irta.Driver()
 
-
     def my_destroy(self):
         ir_app.internal_shutdown()
         self.destroy()
@@ -162,33 +161,45 @@ class ResultFrame(tk.Frame):
         self.configure(bg=gui.options.colours["bg"])
 
         # stint length pointer label
-        self.stint_length_label = tk.Label(self, textvariable=self.stint_length, **gui.options.colours)
-        self.stint_length_label.grid(column=2, row=1, sticky='e')
+        self.stint_length_label = tk.Label(
+            self, textvariable=self.stint_length, **gui.options.colours
+        )
+        self.stint_length_label.grid(column=2, row=1, sticky="e")
         # stint length value label
         self.stint_label = tk.Label(self, text="Stint Length:", **gui.options.colours)
-        self.stint_label.grid(column=1, row=1, sticky='w')
+        self.stint_label.grid(column=1, row=1, sticky="w")
 
         # track temp pointer label
-        self.track_temp_pointer = tk.Label(self, text="Track Temp:", **gui.options.colours)
-        self.track_temp_pointer.grid(row=2, column=1, sticky='w')
+        self.track_temp_pointer = tk.Label(
+            self, text="Track Temp:", **gui.options.colours
+        )
+        self.track_temp_pointer.grid(row=2, column=1, sticky="w")
         # track temp value label
-        self.track_temp_value = tk.Label(self, textvariable=self.track_temp, **gui.options.colours)
-        self.track_temp_value.grid(row=2, column=2, sticky='e')
+        self.track_temp_value = tk.Label(
+            self, textvariable=self.track_temp, **gui.options.colours
+        )
+        self.track_temp_value.grid(row=2, column=2, sticky="e")
 
         # session time pointer label
         self.session_time = tk.StringVar()
-        self.sess_time_pointer = tk.Label(self, text="Session Time:", **gui.options.colours)
-        self.sess_time_pointer.grid(row=3, column=1, sticky='w')
+        self.sess_time_pointer = tk.Label(
+            self, text="Session Time:", **gui.options.colours
+        )
+        self.sess_time_pointer.grid(row=3, column=1, sticky="w")
         # session time value label
-        self.sess_time_value = tk.Label(self, textvariable=self.session_time, **gui.options.colours)
-        self.sess_time_value.grid(row=3, column=2, sticky='e')
+        self.sess_time_value = tk.Label(
+            self, textvariable=self.session_time, **gui.options.colours
+        )
+        self.sess_time_value.grid(row=3, column=2, sticky="e")
 
         # track info pointer
         self.track_pointer = tk.Label(self, text="Track:", **gui.options.colours)
-        self.track_pointer.grid(row=4, column=1, sticky='w')
+        self.track_pointer.grid(row=4, column=1, sticky="w")
         # track info value
-        self.track_label = tk.Label(self, textvariable=self.track, **gui.options.colours)
-        self.track_label.grid(row=4, column=2, sticky='e')
+        self.track_label = tk.Label(
+            self, textvariable=self.track, **gui.options.colours
+        )
+        self.track_label.grid(row=4, column=2, sticky="e")
 
         # self pack
         self.pack(side="bottom", fill="both", expand="true")

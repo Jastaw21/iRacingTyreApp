@@ -70,10 +70,10 @@ class Driver(StateVars):  # main class to be called from UI
             self.ir_connected = False
             return False
         elif (
-                not self.ir_connected
-                and self.ir.startup()
-                and self.ir.is_connected
-                and self.ir.is_initialized
+            not self.ir_connected
+            and self.ir.startup()
+            and self.ir.is_connected
+            and self.ir.is_initialized
         ):
             self.ir_connected = True
             self.ir_label = "iRacing Connected"
@@ -103,7 +103,9 @@ class Driver(StateVars):  # main class to be called from UI
         return tyre_wear
 
     def update_tyre_state(self):
-        if self.check_in_box() or self.ir["OnPitRoad"]:  # if we're not in the box, don't do anything
+        if (
+            self.check_in_box() or self.ir["OnPitRoad"]
+        ):  # if we're not in the box, don't do anything
 
             # get the tyre info
             local_tyre_state = self.get_tyres_state()
@@ -138,8 +140,9 @@ class Driver(StateVars):  # main class to be called from UI
     def lap_time(self):  # in loop
         if self.completed_laps > 0:
             self.last_lap_time = self.ir["LapLastLapTime"]
-            self.lap_dict[self.completed_laps] = \
-                dict(lap_time=self.last_lap_time, track_temp=self.track_temp)
+            self.lap_dict[self.completed_laps] = dict(
+                lap_time=self.last_lap_time, track_temp=self.track_temp
+            )
 
     def track_temp(self):  # in loop
         track_temp_raw = self.ir["TrackTempCrew"]
