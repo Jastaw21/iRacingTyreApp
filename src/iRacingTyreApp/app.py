@@ -23,8 +23,8 @@ class StateVars:  # holds the data for
 
         # tyre info
         self.corners = ["LF", "RF", "LR", "RR"]
-        self.full = ['66%', '66%', '66%']
-        self.warmup = ['44C','44C','44C']
+        self.full = ["66%", "66%", "66%"]
+        self.warmup = ["44C", "44C", "44C"]
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
         self.initial_temps = {corn: self.warmup for corn in self.corners}
@@ -84,10 +84,10 @@ class Driver(StateVars):  # main class to be called from UI
             self.ir_connected = False
             return False
         elif (
-                not self.ir_connected
-                and self.ir.startup()
-                and self.ir.is_connected
-                and self.ir.is_initialized
+            not self.ir_connected
+            and self.ir.startup()
+            and self.ir.is_connected
+            and self.ir.is_initialized
         ):
             self.ir_connected = True
             self.ir_label = "iRacing Connected"
@@ -112,7 +112,7 @@ class Driver(StateVars):  # main class to be called from UI
             for ind in range(0, 3):
                 raw_wear = self.ir[self.tyre_wear_variables[corner][ind]]
                 wear = round(raw_wear * 100, 2)
-                working_list.append(str(wear)+'%')
+                working_list.append(str(wear) + "%")
             tyre_wear[corner] = working_list
         return tyre_wear
 
@@ -123,13 +123,13 @@ class Driver(StateVars):  # main class to be called from UI
             for ind in range(0, 3):
                 raw_temp = self.ir[self.tyre_temp_variables[corner][ind]]
                 temp = round(raw_temp, 1)
-                working_list.append(str(temp)+'C')
+                working_list.append(str(temp) + "C")
             tyre_temp[corner] = working_list
         return tyre_temp
 
     def update_tyre_state(self):
         if (
-                self.check_in_box() or self.ir["OnPitRoad"]
+            self.check_in_box() or self.ir["OnPitRoad"]
         ):  # if we're not in the box, don't do anything
 
             # get the tyre info

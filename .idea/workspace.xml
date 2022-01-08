@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="simplified variables">
+    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="misc">
+      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/iRacingTyreApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/iRacingTyreApp.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" afterDir="false" />
     </list>
@@ -145,10 +149,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test_gui" />
+        <item itemvalue="Python.config" />
+        <item itemvalue="Python.gui" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.ir_vars" />
-        <item itemvalue="Python.gui" />
-        <item itemvalue="Python.config" />
       </list>
     </recent_temporary>
   </component>
@@ -175,77 +179,7 @@
       <option name="project" value="LOCAL" />
       <updated>1640817777233</updated>
     </task>
-    <task id="LOCAL-00003" summary="misc">
-      <created>1641063431190</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1641063431190</updated>
-    </task>
-    <task id="LOCAL-00004" summary="misc">
-      <created>1641497570640</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1641497570640</updated>
-    </task>
-    <task id="LOCAL-00005" summary="misc">
-      <created>1641500701634</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1641500701634</updated>
-    </task>
-    <task id="LOCAL-00006" summary="refactor">
-      <created>1641579056081</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1641579056081</updated>
-    </task>
-    <task id="LOCAL-00007" summary="refactor">
-      <created>1641641326495</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1641641326495</updated>
-    </task>
-    <task id="LOCAL-00008" summary="building out">
-      <created>1641642882232</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1641642882232</updated>
-    </task>
-    <task id="LOCAL-00009" summary="building out">
-      <created>1641669414609</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1641669414609</updated>
-    </task>
-    <task id="LOCAL-00010" summary="image for logo">
-      <created>1641669621757</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1641669621757</updated>
-    </task>
-    <task id="LOCAL-00011" summary="tyre wear getter">
-      <created>1641670253583</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1641670253583</updated>
-    </task>
-    <task id="LOCAL-00012" summary="simplified variables">
-      <created>1641671995720</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1641671995720</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -272,9 +206,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/iRacingTyreApp/app.py</url>
-          <line>27</line>
-          <option name="timeStamp" value="15" />
+          <url>file://$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py</url>
+          <line>335</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

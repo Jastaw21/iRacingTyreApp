@@ -115,7 +115,7 @@ class TyreFrame(ttk.Frame):
         self.label.grid(row=1, column=1, columnspan=3, sticky="WE")
         self.wear_pointer = ttk.Label(self, text="Wear", anchor="center")
         self.wear_pointer.grid(row=2, column=1, columnspan=3, sticky="WE")
-        self.temps_pointer = ttk.Label(self, text='TEMPS', anchor="center")
+        self.temps_pointer = ttk.Label(self, text="TEMPS", anchor="center")
         self.temps_pointer.grid(row=5, column=1, columnspan=3, sticky="WE")
         self.left = ttk.Label(self)
         self.middle = ttk.Label(self)
@@ -136,9 +136,9 @@ class TyreFrame(ttk.Frame):
         self.left_wear = tk.StringVar(value=100)
         self.middle_wear = tk.StringVar(value=100)
         self.right_wear = tk.StringVar(value=100)
-        self.l_lab = ttk.Label(self,textvariable=self.left_wear)
+        self.l_lab = ttk.Label(self, textvariable=self.left_wear)
         self.m_lab = ttk.Label(self, textvariable=self.middle_wear)
-        self.r_lab = ttk.Label(self,textvariable=self.right_wear)
+        self.r_lab = ttk.Label(self, textvariable=self.right_wear)
         self.l_lab.grid(row=4, column=1)
         self.m_lab.grid(row=4, column=2)
         self.r_lab.grid(row=4, column=3)
@@ -148,14 +148,14 @@ class TyreFrame(ttk.Frame):
         self.middle_temp = tk.StringVar()
         self.right_temp = tk.StringVar()
         self.l_temp = ttk.Label(self, textvariable=self.left_temp)
-        self.m_temp = ttk.Label(self,textvariable=self.middle_temp)
-        self.r_temp = ttk.Label(self,textvariable=self.right_temp)
+        self.m_temp = ttk.Label(self, textvariable=self.middle_temp)
+        self.r_temp = ttk.Label(self, textvariable=self.right_temp)
         self.l_temp.grid(row=6, column=1)
         self.m_temp.grid(row=6, column=2)
         self.r_temp.grid(row=6, column=3)
 
     def set_labels(self, values, mode):
-        if mode == 'wear':
+        if mode == "wear":
             self.left_wear.set(values[0])
             self.middle_wear.set(values[1])
             self.right_wear.set(values[2])
@@ -163,7 +163,6 @@ class TyreFrame(ttk.Frame):
             self.left_temp.set(values[0])
             self.middle_temp.set(values[1])
             self.right_temp.set(values[2])
-   
 
 
 class Root(tk.Tk):
@@ -325,15 +324,18 @@ class Root(tk.Tk):
         self.track_temp.set(self.variables.track_temp)
         self.track_name.set(self.variables.track_id)
         self.last_lap.set(self.variables.last_lap)
-        self.handle_tyre_wear(wear_dict=self.variables.current_tyre_state, temp_dict=self.variables.current_tyre_temps)
+        self.handle_tyre_wear(
+            wear_dict=self.variables.current_tyre_state,
+            temp_dict=self.variables.current_tyre_temps,
+        )
 
-    def handle_tyre_wear(self, wear_dict,temp_dict):
+    def handle_tyre_wear(self, wear_dict, temp_dict):
         for tyre in self.left_frame.winfo_children():
             corner = tyre.reference
             wear = wear_dict[corner]
             temp = temp_dict[corner]
-            tyre.set_labels(wear, mode='wear')
-            tyre.set_labels(temp,mode='temp')
+            tyre.set_labels(wear, mode="wear")
+            tyre.set_labels(temp, mode="temp")
 
     def local_loop(self):
         self.variables.ir_app.main_loop()
@@ -358,7 +360,7 @@ class NRG:
     def on_closing(self):
         # catch window close - will build this out later to handle logging etc
         if tkinter.messagebox.askokcancel(
-                "End Process", "Are you sure you want to quit?"
+            "End Process", "Are you sure you want to quit?"
         ):
             self.gui.my_destroy()
 
