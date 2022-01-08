@@ -102,8 +102,9 @@ class Variables:
 
 
 class TyreFrame(ttk.Frame):
-    def __init__(self, parent, corner):
+    def __init__(self, parent, corner, reference):
         super().__init__(parent)
+        self.reference = reference
         self.label = ttk.Label(self, text=corner, anchor="center")
         self.wear_pointer = ttk.Label(self, text="Wear", anchor="center")
         self.configure(height=240, width=120, borderwidth=5, relief="groove")
@@ -115,17 +116,21 @@ class TyreFrame(ttk.Frame):
         self.left = ttk.Label(self)
         self.middle = ttk.Label(self)
         self.right = ttk.Label(self)
-        if corner[0].lower() == 'l':
-            self.left.configure(text='O')
-            self.middle.configure(text='M')
-            self.right.configure(text='I')
+        if corner[0].lower() == "l":
+            self.left.configure(text="O")
+            self.middle.configure(text="M")
+            self.right.configure(text="I")
         else:
-            self.left.configure(text='I')
-            self.middle.configure(text='M')
-            self.right.configure(text='O')
-        self.left.grid(row=3,column=1)
-        self.middle.grid(row=3,column=2)
-        self.right.grid(row=3,column=3)
+            self.left.configure(text="I")
+            self.middle.configure(text="M")
+            self.right.configure(text="O")
+        self.left.grid(row=3, column=1)
+        self.middle.grid(row=3, column=2)
+        self.right.grid(row=3, column=3)
+        self.left_wear = tk.DoubleVar()
+        self.middle_wear = tk.DoubleVar()
+        self.right_wear = tk.DoubleVar()
+
 
 
 class Root(tk.Tk):
@@ -251,13 +256,13 @@ class Root(tk.Tk):
             self.left_frame.grid_columnconfigure(i, weight=1)
 
         """TYRE FRAMES"""
-        lr = TyreFrame(parent=self.left_frame, corner="Left Rear".upper())
+        lr = TyreFrame(parent=self.left_frame, corner="Left Rear".upper(), reference='LR')
         lr.grid(row=2, column=1)
-        rr = TyreFrame(parent=self.left_frame, corner="Right Rear".upper())
+        rr = TyreFrame(parent=self.left_frame, corner="Right Rear".upper(), reference='RR')
         rr.grid(column=2, row=2)
-        lf = TyreFrame(parent=self.left_frame, corner="Left Front".upper())
+        lf = TyreFrame(parent=self.left_frame, corner="Left Front".upper(), reference='LF')
         lf.grid(column=1, row=1)
-        rf = TyreFrame(parent=self.left_frame, corner="Right Front".upper())
+        rf = TyreFrame(parent=self.left_frame, corner="Right Front".upper(), reference='RF')
         rf.grid(row=1, column=2)
         for child in self.left_frame.winfo_children():
             child.grid_configure(**self.options.large_padding)
@@ -265,7 +270,7 @@ class Root(tk.Tk):
                 label.configure(style=self.LIGHTL)
                 label.grid_configure(**self.options.padding)
 
-        '''LOGO PANE'''
+        """LOGO PANE"""
         self.logo = tk.Canvas(self.right_frame, width=382, height=87)
         self.logo.pack(side="bottom")
         self.img = Image.open("NRG.png")
@@ -279,7 +284,12 @@ class Root(tk.Tk):
         self.track_temp.set(self.variables.track_temp)
         self.track_name.set(self.variables.track_id)
         self.last_lap.set(self.variables.last_lap)
-        print(self.variables.current_tyre_state)
+        self.handle_tyre_wear(self.variables.current_tyre_state)
+
+    def handle_tyre_wear(self, wear_dict):
+        for tyre in self.left_frame.winfo_children():
+            corner = tyre.reference
+            print(wear_dict[corner])
 
     def local_loop(self):
         self.variables.ir_app.main_loop()
@@ -290,6 +300,7 @@ class Root(tk.Tk):
         self.variables.ir_app.internal_shutdown()
         time.sleep(uniform(0.3, 1.6))
         self.destroy()
+
 
 class NRG:
     def __init__(self):
