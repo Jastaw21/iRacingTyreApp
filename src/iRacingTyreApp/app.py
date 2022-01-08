@@ -5,6 +5,7 @@ import irsdk
 class StateVars:  # holds the data for
     def __init__(self):
         # general app data
+        self.current_temps = None
         self.ir_connected = False
         self.ir_label = "iRacing Disconnected"
 
@@ -22,9 +23,12 @@ class StateVars:  # holds the data for
 
         # tyre info
         self.corners = ["LF", "RF", "LR", "RR"]
-        self.full = [66, 66, 66]
+        self.full = ['66%', '66%', '66%']
+        self.warmup = ['44C','44C','44C']
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
+        self.initial_temps = {corn: self.full for corn in self.corners}
+        self.current_temps = self.initial_temps
 
         # pitstop info
         self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0})
@@ -51,6 +55,7 @@ class Driver(StateVars):  # main class to be called from UI
         super().__init__()
 
         # populate a list of the tyre wear variables
+
         self.tyre_wear_variables = {
             "LF": ["LFwearL", "LFwearM", "LFwearR"],
             "RF": ["RFwearL", "RFwearM", "RFwearR"],
@@ -107,12 +112,20 @@ class Driver(StateVars):  # main class to be called from UI
             for ind in range(0, 3):
                 raw_wear = self.ir[self.tyre_wear_variables[corner][ind]]
                 wear = round(raw_wear * 100, 2)
-                working_list.append(wear)
+                working_list.append(str(wear)+'%')
             tyre_wear[corner] = working_list
         return tyre_wear
 
     def get_tyre_temps(self):
-        tyre_temps = {}
+        tyre_temp = {}
+        for corner in self.corners:
+            working_list = []
+            for ind in range(0, 3):
+                raw_temp = self.ir[self.tyre_temp_variables[corner][ind]]
+                temp = round(raw_temp, 1)
+                working_list.append(str(temp)+'C')
+            tyre_temp[corner] = working_list
+        return tyre_temp
 
     def update_tyre_state(self):
         if (
@@ -121,11 +134,13 @@ class Driver(StateVars):  # main class to be called from UI
 
             # get the tyre info
             local_tyre_state = self.get_tyres_state()
+            local_tyre_temp = self.get_tyre_temps()
 
             # if they've changed - set our local variable to the new ones and call stop dict builder
             if local_tyre_state != self.current_tyres:
                 self.build_stop_library()
                 self.current_tyres = local_tyre_state
+                self.current_temps = local_tyre_temp
 
             else:
                 pass

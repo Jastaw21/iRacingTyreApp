@@ -46,6 +46,7 @@ class Options:  # Just to hold variables for GUI
 class Variables:
     def __init__(self):
 
+        self.current_temps = None
         self.current_tyres = None
         self.ir_app = irta.Driver()
 
@@ -87,6 +88,12 @@ class Variables:
         return j
 
     @property
+    def current_tyre_temps(self):
+        k = self.ir_app.current_temps
+        self.current_temps = k
+        return k
+
+    @property
     def last_lap(self):
         if self.ir_app.ir_connected:
             return self.ir_app.last_lap_time
@@ -103,14 +110,17 @@ class TyreFrame(ttk.Frame):
     def __init__(self, parent, corner, reference):
         super().__init__(parent)
         self.reference = reference
-        self.label = ttk.Label(self, text=corner, anchor="center")
-        self.wear_pointer = ttk.Label(self, text="Wear", anchor="center")
         self.configure(height=240, width=120, borderwidth=5, relief="groove")
         for i in range(1, 4):
             self.columnconfigure(i, weight=1, minsize=35)
         self.grid_propagate(False)
+        # pointer labels
+        self.label = ttk.Label(self, text=corner, anchor="center")
         self.label.grid(row=1, column=1, columnspan=3, sticky="WE")
+        self.wear_pointer = ttk.Label(self, text="Wear", anchor="center")
         self.wear_pointer.grid(row=2, column=1, columnspan=3, sticky="WE")
+        self.temps_pointer = ttk.Label(self, text='TEMPS', anchor="center")
+        self.temps_pointer.grid(row=5, column=1, columnspan=3, sticky="WE")
         self.left = ttk.Label(self)
         self.middle = ttk.Label(self)
         self.right = ttk.Label(self)
@@ -125,6 +135,8 @@ class TyreFrame(ttk.Frame):
         self.left.grid(row=3, column=1)
         self.middle.grid(row=3, column=2)
         self.right.grid(row=3, column=3)
+
+        # value labels
         self.left_wear = tk.DoubleVar(value=100)
         self.middle_wear = tk.DoubleVar(value=100)
         self.right_wear = tk.DoubleVar(value=100)

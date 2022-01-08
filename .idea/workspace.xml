@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="tyre wear getter">
+    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="simplified variables">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/ir_vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/ir_vars.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -239,7 +238,14 @@
       <option name="project" value="LOCAL" />
       <updated>1641670253583</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="simplified variables">
+      <created>1641671995720</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1641671995720</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -259,15 +265,16 @@
     <MESSAGE value="building out" />
     <MESSAGE value="image for logo" />
     <MESSAGE value="tyre wear getter" />
-    <option name="LAST_COMMIT_MESSAGE" value="tyre wear getter" />
+    <MESSAGE value="simplified variables" />
+    <option name="LAST_COMMIT_MESSAGE" value="simplified variables" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/iRacingTyreApp/app.py</url>
-          <line>56</line>
-          <option name="timeStamp" value="10" />
+          <line>27</line>
+          <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
