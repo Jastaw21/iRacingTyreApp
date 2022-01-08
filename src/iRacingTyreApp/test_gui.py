@@ -29,13 +29,7 @@ class Options:  # Just to hold variables for GUI
         self.padding = dict(padx=1, pady=1)
         self.large_padding = dict(padx=5, pady=5)
         self.tyres = ir_vars.tyre_wear()
-        self.info_for_creation = dict(
-            LF={"side": "left", "text": "LF", "Tparent": "mf"},
-            RF={"side": "right", "text": "RF", "Tparent": "mf"},
-            LR={"side": "left", "text": "LR", "Tparent": "mf"},
-            RR={"side": "left", "text": "LF", "Tparent": "mf"},
-        )
-        self.no_ir_message = "where iR?"
+
 
     @staticmethod
     def darken(hexd):
@@ -54,6 +48,7 @@ class Options:  # Just to hold variables for GUI
 
 class Variables:
     def __init__(self):
+        self.stop_lib = None
         self.ir_app = irta.Driver()
 
     @staticmethod
@@ -79,6 +74,30 @@ class Variables:
             return self.ir_app.track_tempVar
         else:
             return "xx"
+
+    @property
+    def track_id(self):
+        if self.ir_app.ir_connected:
+            return self.ir_app.track_short
+        else:
+            return 'XX'
+
+    @property
+    def current_tyres(self):
+        if self.ir_app.ir_connected:
+            self.stop_lib = self.ir_app.stop_lib
+            return self.current_tyres
+        else:
+            return 'XX'
+
+    @property
+    def last_lap(self):
+        if self.ir_app.ir_connected:
+            return self.ir_app.last_lap_time
+        else:
+            return "xx"
+
+        
 
 
 class Root(tk.Tk):
@@ -160,7 +179,7 @@ class Root(tk.Tk):
         self.session_time = tk.StringVar()
         self.sess_time_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.sess_time_pointer.configure(text="iR Session Time:")
-        self.sess_time_pointer.grid(row=2, column=1)
+        self.sess_time_pointer.grid(row=2, column=1,sticky='w')
         self.sess_time_value = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.sess_time_value.configure(textvariable=self.session_time)
         self.sess_time_value.grid(row=2, column=2)
@@ -169,7 +188,7 @@ class Root(tk.Tk):
         self.track_temp = tk.StringVar()
         self.tt_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.tt_pointer.configure(text='Track Temp:')
-        self.tt_pointer.grid(row=3, column=1)
+        self.tt_pointer.grid(row=3, column=1,sticky='w')
         self.tt_value = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.tt_value.configure(textvariable=self.track_temp)
         self.tt_value.grid(row=3, column=2)
@@ -178,11 +197,19 @@ class Root(tk.Tk):
         self.track_name = tk.StringVar()
         self.track_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.track_pointer.configure(text='Track:')
-        self.track_pointer.grid(row=4, column=1)
+        self.track_pointer.grid(row=4, column=1,sticky='w')
         self.track_value = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.track_value.configure(textvariable=self.track_name)
         self.track_value.grid(row=4, column=2)
 
+        # lap time
+        self.last_lap = tk.StringVar()
+        self.lap_pointer = ttk.Label(self.right_frame,style=self.LIGHTL)
+        self.lap_pointer.configure(text='Lap time:')
+        self.lap_pointer.grid(row=5,column=1,sticky='w')
+        self.lap_time = ttk.Label(self.right_frame,style=self.LIGHTL)
+        self.lap_time.configure(textvariable=self.last_lap)
+        self.lap_time.grid(row=5,column=2)
         self.right_frame.pack(side="right", fill="y")
 
     def refresh_labels(self):
@@ -190,6 +217,8 @@ class Root(tk.Tk):
         self.iracing_state.set(self.variables.get_ir_state)
         self.session_time.set(self.variables.get_session_time)
         self.track_temp.set(self.variables.track_temp)
+        self.track_name.set(self.variables.track_id)
+        self.last_lap.set(self.variables.last_lap)
 
     def local_loop(self):
         self.variables.ir_app.main_loop()
