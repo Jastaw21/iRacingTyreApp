@@ -5,7 +5,7 @@ import irsdk
 class StateVars:  # holds the data for
     def __init__(self):
         # general app data
-        self.current_temps = None
+
         self.ir_connected = False
         self.ir_label = "iRacing Disconnected"
 
@@ -27,7 +27,7 @@ class StateVars:  # holds the data for
         self.warmup = ['44C','44C','44C']
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
-        self.initial_temps = {corn: self.full for corn in self.corners}
+        self.initial_temps = {corn: self.warmup for corn in self.corners}
         self.current_temps = self.initial_temps
 
         # pitstop info

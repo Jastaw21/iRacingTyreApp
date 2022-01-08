@@ -12,5 +12,5 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Jastaw21/iRacingTyreApp",
     author="Jack Weddell",
-    packages=["iRacingTyreApp"],
+    packages=["iRacingTyreApp"]
 )
