@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="misc">
+    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="building out">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/gui.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -176,7 +173,28 @@
       <option name="project" value="LOCAL" />
       <updated>1641500701634</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="refactor">
+      <created>1641579056081</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1641579056081</updated>
+    </task>
+    <task id="LOCAL-00007" summary="refactor">
+      <created>1641641326495</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1641641326495</updated>
+    </task>
+    <task id="LOCAL-00008" summary="building out">
+      <created>1641642882232</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1641642882232</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -192,13 +210,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="misc" />
-    <option name="LAST_COMMIT_MESSAGE" value="misc" />
-  </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="self.local_stop_list" />
-      </configuration>
-    </watches-manager>
+    <MESSAGE value="refactor" />
+    <MESSAGE value="building out" />
+    <option name="LAST_COMMIT_MESSAGE" value="building out" />
   </component>
 </project>

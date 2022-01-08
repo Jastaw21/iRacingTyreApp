@@ -7,7 +7,7 @@ from tkinter import ttk
 import app as irta
 import config as CFG
 import ir_vars
-from PIL import ImageColor
+from PIL import ImageColor, Image, ImageTk
 
 
 class Options:  # Just to hold variables for GUI
@@ -30,7 +30,6 @@ class Options:  # Just to hold variables for GUI
         self.large_padding = dict(padx=5, pady=5)
         self.tyres = ir_vars.tyre_wear()
 
-
     @staticmethod
     def darken(hexd):
         rgb = ImageColor.getcolor(hexd, "RGB")
@@ -48,7 +47,8 @@ class Options:  # Just to hold variables for GUI
 
 class Variables:
     def __init__(self):
-        self.stop_lib = None
+
+        self.current_tyres = None
         self.ir_app = irta.Driver()
 
     @staticmethod
@@ -80,15 +80,13 @@ class Variables:
         if self.ir_app.ir_connected:
             return self.ir_app.track_short
         else:
-            return 'XX'
+            return "XX"
 
     @property
-    def current_tyres(self):
-        if self.ir_app.ir_connected:
-            self.stop_lib = self.ir_app.stop_lib
-            return self.current_tyres
-        else:
-            return 'XX'
+    def current_tyre_state(self):
+        j = self.ir_app.current_tyres
+        self.current_tyres = j
+        return j
 
     @property
     def last_lap(self):
@@ -97,7 +95,37 @@ class Variables:
         else:
             return "xx"
 
-        
+    @property
+    def stop_lib(self):
+        if self.ir_app.ir_connected:
+            return self.ir_app.stop_lib
+
+
+class TyreFrame(ttk.Frame):
+    def __init__(self, parent, corner):
+        super().__init__(parent)
+        self.label = ttk.Label(self, text=corner, anchor="center")
+        self.wear_pointer = ttk.Label(self, text="Wear", anchor="center")
+        self.configure(height=240, width=120, borderwidth=5, relief="groove")
+        for i in range(1, 4):
+            self.columnconfigure(i, weight=1, minsize=35)
+        self.grid_propagate(False)
+        self.label.grid(row=1, column=1, columnspan=3, sticky="WE")
+        self.wear_pointer.grid(row=2, column=1, columnspan=3, sticky="WE")
+        self.left = ttk.Label(self)
+        self.middle = ttk.Label(self)
+        self.right = ttk.Label(self)
+        if corner[0].lower() == 'l':
+            self.left.configure(text='O')
+            self.middle.configure(text='M')
+            self.right.configure(text='I')
+        else:
+            self.left.configure(text='I')
+            self.middle.configure(text='M')
+            self.right.configure(text='O')
+        self.left.grid(row=3,column=1)
+        self.middle.grid(row=3,column=2)
+        self.right.grid(row=3,column=3)
 
 
 class Root(tk.Tk):
@@ -121,6 +149,7 @@ class Root(tk.Tk):
         self.style.configure("Lightened.TLabel", **self.options.lightened)
         self.style.configure("Lightened.TMenubutton", **self.options.lightened)
         self.LIGHTL = "Lightened.TLabel"
+        self.DARKF = "Gutter.TFrame"
 
         # root info
         self.HEIGHT = "650"
@@ -128,7 +157,7 @@ class Root(tk.Tk):
         self.title("NRG Tyre App")
         self.configure(bg=self.options.colours["background"])
         self.geometry(self.WIDTH + "x" + self.HEIGHT)
-        self.minsize()
+        self.resizable(False, False)
 
         """THE GUTTER BAR"""
         self.gutter_frame = ttk.Frame(self, style="Gutter.TFrame")
@@ -179,7 +208,7 @@ class Root(tk.Tk):
         self.session_time = tk.StringVar()
         self.sess_time_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.sess_time_pointer.configure(text="iR Session Time:")
-        self.sess_time_pointer.grid(row=2, column=1,sticky='w')
+        self.sess_time_pointer.grid(row=2, column=1, sticky="w")
         self.sess_time_value = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.sess_time_value.configure(textvariable=self.session_time)
         self.sess_time_value.grid(row=2, column=2)
@@ -187,8 +216,8 @@ class Root(tk.Tk):
         # track temp
         self.track_temp = tk.StringVar()
         self.tt_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
-        self.tt_pointer.configure(text='Track Temp:')
-        self.tt_pointer.grid(row=3, column=1,sticky='w')
+        self.tt_pointer.configure(text="Track Temp:")
+        self.tt_pointer.grid(row=3, column=1, sticky="w")
         self.tt_value = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.tt_value.configure(textvariable=self.track_temp)
         self.tt_value.grid(row=3, column=2)
@@ -196,21 +225,52 @@ class Root(tk.Tk):
         # track name
         self.track_name = tk.StringVar()
         self.track_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
-        self.track_pointer.configure(text='Track:')
-        self.track_pointer.grid(row=4, column=1,sticky='w')
+        self.track_pointer.configure(text="Track:")
+        self.track_pointer.grid(row=4, column=1, sticky="w")
         self.track_value = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.track_value.configure(textvariable=self.track_name)
         self.track_value.grid(row=4, column=2)
 
         # lap time
         self.last_lap = tk.StringVar()
-        self.lap_pointer = ttk.Label(self.right_frame,style=self.LIGHTL)
-        self.lap_pointer.configure(text='Lap time:')
-        self.lap_pointer.grid(row=5,column=1,sticky='w')
-        self.lap_time = ttk.Label(self.right_frame,style=self.LIGHTL)
+        self.lap_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
+        self.lap_pointer.configure(text="Lap time:")
+        self.lap_pointer.grid(row=5, column=1, sticky="w")
+        self.lap_time = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.lap_time.configure(textvariable=self.last_lap)
-        self.lap_time.grid(row=5,column=2)
+        self.lap_time.grid(row=5, column=2)
         self.right_frame.pack(side="right", fill="y")
+
+        """LEFT FRAME TO HOLD INDIVIDUAL TYRES"""
+        self.left_frame = ttk.Frame(self, style=self.DARKF)
+        self.left_frame.configure(width=int(self.WIDTH) * (2 / 3))
+        self.left_frame.configure(borderwidth=5, relief="groove")
+        self.left_frame.pack(fill="both", expand=True)
+        for i in [1, 2]:
+            self.left_frame.grid_rowconfigure(i, weight=1)
+            self.left_frame.grid_columnconfigure(i, weight=1)
+
+        """TYRE FRAMES"""
+        lr = TyreFrame(parent=self.left_frame, corner="Left Rear".upper())
+        lr.grid(row=2, column=1)
+        rr = TyreFrame(parent=self.left_frame, corner="Right Rear".upper())
+        rr.grid(column=2, row=2)
+        lf = TyreFrame(parent=self.left_frame, corner="Left Front".upper())
+        lf.grid(column=1, row=1)
+        rf = TyreFrame(parent=self.left_frame, corner="Right Front".upper())
+        rf.grid(row=1, column=2)
+        for child in self.left_frame.winfo_children():
+            child.grid_configure(**self.options.large_padding)
+            for label in child.winfo_children():
+                label.configure(style=self.LIGHTL)
+                label.grid_configure(**self.options.padding)
+
+        '''LOGO PANE'''
+        self.logo = tk.Canvas(self.right_frame, width=382, height=87)
+        self.logo.pack(side="bottom")
+        self.img = Image.open("NRG.png")
+        self.source_img = ImageTk.PhotoImage(self.img)
+        self.logo.create_image(0, 0, anchor=tk.NW, image=self.source_img)
 
     def refresh_labels(self):
         self.current_time.set(self.variables.get_time())
@@ -219,17 +279,17 @@ class Root(tk.Tk):
         self.track_temp.set(self.variables.track_temp)
         self.track_name.set(self.variables.track_id)
         self.last_lap.set(self.variables.last_lap)
+        print(self.variables.current_tyre_state)
 
     def local_loop(self):
         self.variables.ir_app.main_loop()
         self.refresh_labels()
-        self.after(5, self.local_loop)
+        self.after(6, self.local_loop)
 
     def my_destroy(self):
         self.variables.ir_app.internal_shutdown()
         time.sleep(uniform(0.3, 1.6))
         self.destroy()
-
 
 class NRG:
     def __init__(self):
