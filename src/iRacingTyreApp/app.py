@@ -1,8 +1,5 @@
 import time
-
 import irsdk
-
-import ir_vars
 
 
 class StateVars:  # holds the data for
@@ -25,7 +22,7 @@ class StateVars:  # holds the data for
 
         # tyre info
         self.corners = ["LF", "RF", "LR", "RR"]
-        self.full = [100, 100, 100]
+        self.full = [66, 66, 66]
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
 
@@ -54,7 +51,19 @@ class Driver(StateVars):  # main class to be called from UI
         super().__init__()
 
         # populate a list of the tyre wear variables
-        self.tyre_variables = ir_vars.tyre_wear()
+        self.tyre_wear_variables = {
+            "LF": ["LFwearL", "LFwearM", "LFwearR"],
+            "RF": ["RFwearL", "RFwearM", "RFwearR"],
+            "LR": ["LRwearL", "LRwearM", "LRwearR"],
+            "RR": ["RRwearL", "RRwearM", "RRwearR"],
+        }
+
+        self.tyre_temp_variables = {
+            "LF": ["LFtempCL", "LFtempCM", "LFtempCR"],
+            "RF": ["RFtempCL", "RFtempCM", "RFtempCR"],
+            "LR": ["LRtempCL", "LRtempCM", "LRtempCR"],
+            "RR": ["RRtempCL", "RRtempCM", "RRtempCR"],
+        }
 
         # initialise the SDK connection and the state variables
         self.ir = irsdk.IRSDK()
@@ -70,10 +79,10 @@ class Driver(StateVars):  # main class to be called from UI
             self.ir_connected = False
             return False
         elif (
-            not self.ir_connected
-            and self.ir.startup()
-            and self.ir.is_connected
-            and self.ir.is_initialized
+                not self.ir_connected
+                and self.ir.startup()
+                and self.ir.is_connected
+                and self.ir.is_initialized
         ):
             self.ir_connected = True
             self.ir_label = "iRacing Connected"
@@ -96,15 +105,18 @@ class Driver(StateVars):  # main class to be called from UI
         for corner in self.corners:
             working_list = []
             for ind in range(0, 3):
-                raw_wear = self.ir[self.tyre_variables[corner][ind]]
+                raw_wear = self.ir[self.tyre_wear_variables[corner][ind]]
                 wear = round(raw_wear * 100, 2)
                 working_list.append(wear)
             tyre_wear[corner] = working_list
         return tyre_wear
 
+    def get_tyre_temps(self):
+        tyre_temps = {}
+
     def update_tyre_state(self):
         if (
-            self.check_in_box() or self.ir["OnPitRoad"]
+                self.check_in_box() or self.ir["OnPitRoad"]
         ):  # if we're not in the box, don't do anything
 
             # get the tyre info

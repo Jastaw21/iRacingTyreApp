@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="building out">
+    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="tyre wear getter">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/ir_vars.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/ir_vars.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/test_gui.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -37,7 +39,7 @@
   </component>
   <component name="RunManager" selected="Python.test_gui">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="pythonProject" />
+      <module name="iRacingTyreApp" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -45,7 +47,7 @@
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/iRacingTyreApp" />
-      <option name="IS_MODULE_SDK" value="false" />
+      <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/iRacingTyreApp/app.py" />
@@ -99,6 +101,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ir_vars" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="iRacingTyreApp" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/iRacingTyreApp" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/iRacingTyreApp/ir_vars.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="test_gui" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="iRacingTyreApp" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -123,9 +146,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test_gui" />
+        <item itemvalue="Python.app" />
+        <item itemvalue="Python.ir_vars" />
         <item itemvalue="Python.gui" />
         <item itemvalue="Python.config" />
-        <item itemvalue="Python.app" />
       </list>
     </recent_temporary>
   </component>
@@ -194,7 +218,28 @@
       <option name="project" value="LOCAL" />
       <updated>1641642882232</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="building out">
+      <created>1641669414609</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1641669414609</updated>
+    </task>
+    <task id="LOCAL-00010" summary="image for logo">
+      <created>1641669621757</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1641669621757</updated>
+    </task>
+    <task id="LOCAL-00011" summary="tyre wear getter">
+      <created>1641670253583</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1641670253583</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -212,6 +257,19 @@
     <MESSAGE value="misc" />
     <MESSAGE value="refactor" />
     <MESSAGE value="building out" />
-    <option name="LAST_COMMIT_MESSAGE" value="building out" />
+    <MESSAGE value="image for logo" />
+    <MESSAGE value="tyre wear getter" />
+    <option name="LAST_COMMIT_MESSAGE" value="tyre wear getter" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/iRacingTyreApp/app.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

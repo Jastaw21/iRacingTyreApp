@@ -6,7 +6,6 @@ import tkinter.messagebox
 from tkinter import ttk
 import app as irta
 import config as CFG
-import ir_vars
 from PIL import ImageColor, Image, ImageTk
 
 
@@ -28,7 +27,6 @@ class Options:  # Just to hold variables for GUI
         )
         self.padding = dict(padx=1, pady=1)
         self.large_padding = dict(padx=5, pady=5)
-        self.tyres = ir_vars.tyre_wear()
 
     @staticmethod
     def darken(hexd):
@@ -127,10 +125,23 @@ class TyreFrame(ttk.Frame):
         self.left.grid(row=3, column=1)
         self.middle.grid(row=3, column=2)
         self.right.grid(row=3, column=3)
-        self.left_wear = tk.DoubleVar()
-        self.middle_wear = tk.DoubleVar()
-        self.right_wear = tk.DoubleVar()
+        self.left_wear = tk.DoubleVar(value=100)
+        self.middle_wear = tk.DoubleVar(value=100)
+        self.right_wear = tk.DoubleVar(value=100)
+        self.l_lab = ttk.Label(self)
+        self.m_lab = ttk.Label(self)
+        self.r_lab = ttk.Label(self)
+        self.l_lab.configure(textvariable=self.left_wear)
+        self.m_lab.configure(textvariable=self.middle_wear)
+        self.r_lab.configure(textvariable=self.right_wear)
+        self.l_lab.grid(row=4, column=1)
+        self.m_lab.grid(row=4, column=2)
+        self.r_lab.grid(row=4, column=3)
 
+    def set_labels(self, wear):
+        self.left_wear.set(wear[0])
+        self.middle_wear.set(wear[1])
+        self.right_wear.set(wear[2])
 
 
 class Root(tk.Tk):
@@ -256,13 +267,21 @@ class Root(tk.Tk):
             self.left_frame.grid_columnconfigure(i, weight=1)
 
         """TYRE FRAMES"""
-        lr = TyreFrame(parent=self.left_frame, corner="Left Rear".upper(), reference='LR')
+        lr = TyreFrame(
+            parent=self.left_frame, corner="Left Rear".upper(), reference="LR"
+        )
         lr.grid(row=2, column=1)
-        rr = TyreFrame(parent=self.left_frame, corner="Right Rear".upper(), reference='RR')
+        rr = TyreFrame(
+            parent=self.left_frame, corner="Right Rear".upper(), reference="RR"
+        )
         rr.grid(column=2, row=2)
-        lf = TyreFrame(parent=self.left_frame, corner="Left Front".upper(), reference='LF')
+        lf = TyreFrame(
+            parent=self.left_frame, corner="Left Front".upper(), reference="LF"
+        )
         lf.grid(column=1, row=1)
-        rf = TyreFrame(parent=self.left_frame, corner="Right Front".upper(), reference='RF')
+        rf = TyreFrame(
+            parent=self.left_frame, corner="Right Front".upper(), reference="RF"
+        )
         rf.grid(row=1, column=2)
         for child in self.left_frame.winfo_children():
             child.grid_configure(**self.options.large_padding)
@@ -289,7 +308,8 @@ class Root(tk.Tk):
     def handle_tyre_wear(self, wear_dict):
         for tyre in self.left_frame.winfo_children():
             corner = tyre.reference
-            print(wear_dict[corner])
+            wear = wear_dict[corner]
+            tyre.set_labels(wear)
 
     def local_loop(self):
         self.variables.ir_app.main_loop()
