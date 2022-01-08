@@ -47,7 +47,7 @@ class Variables:
     def __init__(self):
         self.current_tyres = None
         self.ir_app = irta.Driver()
-        self.stop_list = ['Initial']
+        self.stop_list = ["Initial"]
 
     @staticmethod
     def get_time():
@@ -232,8 +232,12 @@ class Root(tk.Tk):
         self.columnconfigure(2, weight=1)
         # option menu
         self.stop_selected = tk.StringVar(value="Initial")
-        self.option_menu = ttk.OptionMenu(self.right_frame, self.stop_selected, *self.variables.stop_list,
-                                          command=self.print_var)
+        self.option_menu = ttk.OptionMenu(
+            self.right_frame,
+            self.stop_selected,
+            *self.variables.stop_list,
+            command=self.print_var
+        )
         self.option_menu.configure(takefocus=True)
         self.option_menu.grid(column=2, row=1, sticky="e")
         self.option_label = ttk.Label(
@@ -347,7 +351,8 @@ class Root(tk.Tk):
         time.sleep(uniform(0.3, 1.6))
         self.destroy()
 
-    def print_var(self,value):
+    @staticmethod
+    def print_var(value):
         print(value)
 
 
@@ -363,7 +368,7 @@ class NRG:
     def on_closing(self):
         # catch window close - will build this out later to handle logging etc
         if tkinter.messagebox.askokcancel(
-                "End Process", "Are you sure you want to quit?"
+            "End Process", "Are you sure you want to quit?"
         ):
             self.gui.my_destroy()
 
