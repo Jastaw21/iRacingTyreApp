@@ -47,7 +47,7 @@ class Variables:
     def __init__(self):
         self.current_tyres = None
         self.ir_app = irta.Driver()
-        self.stop_list = ["Initial"]
+        self.stop_list = ["Last","Initial"]
 
     @staticmethod
     def get_time():
@@ -99,8 +99,11 @@ class Variables:
 
     @property
     def stop_lib(self):
-        if self.ir_app.ir_connected:
-            return self.ir_app.stop_lib
+        lib = self.ir_app.stop_lib
+        for i in lib:
+            if i not in self.stop_list:
+                self.stop_list.append(i)
+        return lib
 
 
 class TyreFrame(ttk.Frame):
@@ -231,19 +234,12 @@ class Root(tk.Tk):
         self.columnconfigure(1, weight=2)
         self.columnconfigure(2, weight=1)
         # option menu
-        self.stop_selected = tk.StringVar(value="Initial")
-        self.option_menu = ttk.OptionMenu(
-            self.right_frame,
-            self.stop_selected,
-            *self.variables.stop_list,
-            command=self.print_var
-        )
-        self.option_menu.configure(takefocus=True)
-        self.option_menu.grid(column=2, row=1, sticky="e")
-        self.option_label = ttk.Label(
-            self.right_frame, text="Select a Stop:", style="Lightened.TLabel"
-        )
-        self.option_label.grid(column=1, row=1, sticky="w")
+        self.selected_stop = tk.StringVar(value='Initial')
+        self.stop_selection = ttk.Combobox(self.right_frame,
+                                           textvariable=self.selected_stop,
+                                           values=self.variables.stop_list)
+
+        self.stop_selection.grid(column=3,row=2)
 
         # session time
         self.session_time = tk.StringVar()
@@ -332,6 +328,14 @@ class Root(tk.Tk):
             wear_dict=self.variables.current_tyre_state,
             temp_dict=self.variables.current_tyre_temps,
         )
+        self.handle_option_menu()
+
+    def handle_option_menu(self):
+        selected = self.stop_selection.get()
+        if selected == 'Last':
+            print(self.variables.stop_lib[self.variables.stop_list[-1]])
+        else:
+            print(selected)
 
     def handle_tyre_wear(self, wear_dict, temp_dict):
         for tyre in self.left_frame.winfo_children():
@@ -361,7 +365,6 @@ class NRG:
         self.gui = Root()
         self.gui.button.configure(command=self.on_closing)
         self.gui.local_loop()
-
         self.gui.protocol("WM_DELETE_WINDOW", self.on_closing)
         self.gui.mainloop()
 

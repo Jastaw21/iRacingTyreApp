@@ -31,7 +31,7 @@ class StateVars:  # holds the data for
         self.current_temps = self.initial_temps
 
         # pitstop info
-        self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0})
+        self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0, "temps":self.initial_temps})
         self.pit_count = 0
         self.last_stop_lap = 0
 
@@ -47,7 +47,7 @@ class StateVars:  # holds the data for
         self.full = [100, 100, 100]
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
-        self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0})
+        self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0, "temps":self.initial_temps})
 
 
 class Driver(StateVars):  # main class to be called from UI
@@ -151,6 +151,7 @@ class Driver(StateVars):  # main class to be called from UI
         self.pit_count += 1
         self.stop_lib["Stop" + str(self.pit_count)] = {
             "wear": self.current_tyres,
+            "temps":self.current_temps,
             "length": (self.completed_laps - self.last_stop_lap),
         }
         self.last_stop_lap = self.completed_laps
