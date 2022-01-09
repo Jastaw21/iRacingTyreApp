@@ -8,6 +8,7 @@ class StateVars:  # holds the data for
 
         self.ir_connected = False
         self.ir_label = "iRacing Disconnected"
+        self.stop_inhibit = False
 
         # session info
         self.session_time = None
@@ -23,7 +24,7 @@ class StateVars:  # holds the data for
 
         # tyre info
         self.corners = ["LF", "RF", "LR", "RR"]
-        self.full = ["66%", "66%", "66%"]
+        self.full = ["100%", "100%", "100%"]
         self.warmup = ["44C", "44C", "44C"]
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
@@ -31,7 +32,13 @@ class StateVars:  # holds the data for
         self.current_temps = self.initial_temps
 
         # pitstop info
-        self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0, "temps":self.initial_temps})
+        self.stop_lib = dict(
+            Initial={
+                "wear": self.initial_tyres,
+                "length": 0,
+                "temps": self.initial_temps,
+            }
+        )
         self.pit_count = 0
         self.last_stop_lap = 0
 
@@ -47,7 +54,13 @@ class StateVars:  # holds the data for
         self.full = [100, 100, 100]
         self.initial_tyres = {corn: self.full for corn in self.corners}
         self.current_tyres = self.initial_tyres
-        self.stop_lib = dict(Initial={"wear": self.initial_tyres, "length": 0, "temps":self.initial_temps})
+        self.stop_lib = dict(
+            Initial={
+                "wear": self.initial_tyres,
+                "length": 0,
+                "temps": self.initial_temps,
+            }
+        )
 
 
 class Driver(StateVars):  # main class to be called from UI
@@ -56,6 +69,7 @@ class Driver(StateVars):  # main class to be called from UI
 
         # populate a list of the tyre wear variables
 
+        self.stop_ready_flag = None
         self.tyre_wear_variables = {
             "LF": ["LFwearL", "LFwearM", "LFwearR"],
             "RF": ["RFwearL", "RFwearM", "RFwearR"],
@@ -99,10 +113,11 @@ class Driver(StateVars):  # main class to be called from UI
 
     # checks if we're in the box - use this to decide whether to bother grabbing tyre info
     def check_in_box(self):
-        if self.ir["PlayerCarInPitStall"] and self.ir["IsOnTrack"]:
-            return True
-        else:
+        if not self.ir["OnPitRoad"]:
+            self.stop_inhibit = False
             return False
+        elif self.ir["OnPitRoad"]:
+            return True
 
     # this polls the SDK for the wear, and returns it in format of {LF:[100,95,84].... etc
     def get_tyres_state(self):
@@ -128,30 +143,22 @@ class Driver(StateVars):  # main class to be called from UI
         return tyre_temp
 
     def update_tyre_state(self):
-        if (
-            self.check_in_box() or self.ir["OnPitRoad"]
-        ):  # if we're not in the box, don't do anything
-
-            # get the tyre info
+        if self.check_in_box() and not self.stop_inhibit:
+            self.stop_ready_flag = True  # if we're in the pitlane - keep sampling the tyres until we see the change
             local_tyre_state = self.get_tyres_state()
             local_tyre_temp = self.get_tyre_temps()
-
             # if they've changed - set our local variable to the new ones and call stop dict builder
             if local_tyre_state != self.current_tyres:
-                self.build_stop_library()
                 self.current_tyres = local_tyre_state
                 self.current_temps = local_tyre_temp
-
-            else:
-                pass
-        else:
-            pass
+                self.stop_inhibit = True
+                self.build_stop_library()
 
     def build_stop_library(self):
         self.pit_count += 1
         self.stop_lib["Stop" + str(self.pit_count)] = {
             "wear": self.current_tyres,
-            "temps":self.current_temps,
+            "temps": self.current_temps,
             "length": (self.completed_laps - self.last_stop_lap),
         }
         self.last_stop_lap = self.completed_laps

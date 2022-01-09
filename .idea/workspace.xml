@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="misc">
+    <list default="true" id="83154343-5783-4663-9bd5-b01a279562c2" name="Changes" comment="simplified variables">
+      <change beforePath="$PROJECT_DIR$/.idea/iRacingTyreApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/iRacingTyreApp.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_01_2022_23_00__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_08_01_2022_23_00__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/iRacingTyreApp/gui.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/iRacingTyreApp/gui.py" afterDir="false" />

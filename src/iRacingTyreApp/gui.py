@@ -70,7 +70,7 @@ class RightFrame(tk.Frame):  # to hold the drop down
     def __init__(self, Tparent):
         super().__init__(Tparent)
 
-        self.stop_list = ["Last","Initial"]  # will work out why I put this here
+        self.stop_list = ["Last", "Initial"]  # will work out why I put this here
         self.configure(
             bg=gui.options.colours["bg"], relief="raised", borderwidth=2
         )  # this is the frame

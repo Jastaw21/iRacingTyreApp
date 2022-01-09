@@ -47,7 +47,7 @@ class Variables:
     def __init__(self):
         self.current_tyres = None
         self.ir_app = irta.Driver()
-        self.stop_list = ["Last","Initial"]
+        self.stop_list = ["Last", "Initial"]
 
     @staticmethod
     def get_time():
@@ -169,6 +169,12 @@ class TyreFrame(ttk.Frame):
             self.right_temp.set(values[2])
 
 
+class MySeperator(ttk.Separator):
+    def __init__(self, parent, orientation):
+        super().__init__(parent)
+        self.configure(orient=orientation)
+
+
 class Root(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -233,15 +239,12 @@ class Root(tk.Tk):
         self.right_frame.grid_propagate(False)
         self.columnconfigure(1, weight=2)
         self.columnconfigure(2, weight=1)
-        # option menu
-        self.selected_stop = tk.StringVar(value='Initial')
-        self.stop_selection = ttk.Combobox(self.right_frame,
-                                           textvariable=self.selected_stop,
-                                           values=self.variables.stop_list)
-
-        self.stop_selection.grid(column=3,row=2)
 
         # session time
+        self.session_info = ttk.Label(
+            self.right_frame, text="SESSION INFO", style=self.LIGHTL
+        )
+        self.session_info.grid(row=1, column=1, columnspan=3)
         self.session_time = tk.StringVar()
         self.sess_time_pointer = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.sess_time_pointer.configure(text="iR Session Time:")
@@ -276,6 +279,25 @@ class Root(tk.Tk):
         self.lap_time = ttk.Label(self.right_frame, style=self.LIGHTL)
         self.lap_time.configure(textvariable=self.last_lap)
         self.lap_time.grid(row=5, column=2)
+        self.sep = MySeperator(self.right_frame, "horizontal")
+        self.sep.grid(row=7, column=1, columnspan=3, sticky="ew", pady=5)
+
+        self.stint_info = ttk.Label(
+            self.right_frame, text="STINT INFO", style=self.LIGHTL
+        )
+        self.stint_info.grid(row=8, column=1, columnspan=3)
+
+        # option menu
+        self.selected_stop = tk.StringVar(value="Initial")
+        self.stop_selection = ttk.Combobox(
+            self.right_frame,
+            textvariable=self.selected_stop,
+            values=self.variables.stop_list,
+            state="readonly",
+        )
+
+        self.stop_selection.grid(column=1, columnspan=3, row=9)
+
         self.right_frame.pack(side="right", fill="y")
 
         """LEFT FRAME TO HOLD INDIVIDUAL TYRES"""
@@ -332,10 +354,21 @@ class Root(tk.Tk):
 
     def handle_option_menu(self):
         selected = self.stop_selection.get()
-        if selected == 'Last':
-            print(self.variables.stop_lib[self.variables.stop_list[-1]])
+        if selected == "Last":
+            stop = self.variables.stop_list[-1]
         else:
-            print(selected)
+            stop = selected
+
+        values = self.variables.stop_lib[stop]
+        temp = values["temps"]
+        wear = values["wear"]
+        self.handle_tyre_wear(wear_dict=wear, temp_dict=temp)
+
+        if self.variables.stop_list[-1] not in self.stop_selection["values"]:
+            self.stop_selection["values"] = (
+                *self.stop_selection["values"],
+                self.variables.stop_list[-1],
+            )
 
     def handle_tyre_wear(self, wear_dict, temp_dict):
         for tyre in self.left_frame.winfo_children():
@@ -354,10 +387,6 @@ class Root(tk.Tk):
         self.variables.ir_app.internal_shutdown()
         time.sleep(uniform(0.3, 1.6))
         self.destroy()
-
-    @staticmethod
-    def print_var(value):
-        print(value)
 
 
 class NRG:
