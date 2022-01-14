@@ -13,7 +13,7 @@ class Options:  # Just to hold variables for GUI
     def __init__(self):
         self.cfg = CFG.AppConfig()
         self.config = self.cfg.config_dict
-        self.colours = dict(foreground="#000421", background="#dee2ff")
+        self.colours = dict(foreground="#000421", background="#dee2ff") #comment posted from VSCode
         self.darkened = dict(
             foreground=self.darken(self.colours["foreground"]),
             background=self.darken(self.colours["background"]),
